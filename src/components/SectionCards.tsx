@@ -3,7 +3,7 @@ import ProfitLossPieChart from "./charts/ProfitLossPieChart";
 
 export default function SectionCards() {
   return (
-    <div className="grid grid-cols-1 gap-4 @lg/main:grid-cols-2 @4xl/main:grid-cols-4 @4xl/main:grid-rows-2 *:bg-transparent">
+    <div className="grid grid-cols-1 gap-4 @lg/main:grid-cols-2 @4xl/main:grid-cols-4 @4xl/main:grid-rows-2 ">
       <Card className="@container/card @4xl/main:col-span-2">
         <CardHeader>
           <CardDescription>Balance</CardDescription>
@@ -15,7 +15,7 @@ export default function SectionCards() {
 
       <Card className="@container/card @4xl/main:col-span-2 @4xl/main:row-start-2">
         <CardHeader>
-          <CardDescription>Balance</CardDescription>
+          <CardDescription>Today's Profit</CardDescription>
           <CardTitle className="@[250px]/card:text-3xl text-2xl font-semibold tabular-nums">
             $1,000.00
           </CardTitle>

@@ -32,7 +32,7 @@ export default function AppSidebar() {
             <SidebarMenuButton asChild>
               <Link href={"/"}>
                 <CircleDollarSign />
-                <h1 className="text-lg font-bold">Ftrade</h1>
+                <h1 className="text-lg font-bold">FTrade</h1>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

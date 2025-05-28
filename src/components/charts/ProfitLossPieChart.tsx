@@ -6,18 +6,18 @@ import {
 } from "@/components/ui/chart";
 
 const chartData = [
-  { revenue: "profit", amount: 1000, fill: "#2eba27" },
-  { revenue: "loss", amount: 400, fill: "#e02f2f" }
+  { revenue: "profit", amount: 1000, fill: "var(--color-profit)" },
+  { revenue: "loss", amount: 400, fill: "var(--color-loss)"}
 ];
 
 const chartConfig = {
   profit: {
     label: "Profit",
-    color: "hsl(var(--sl-chart-1))"
+    color: "var(--color-chart-4)"
   },
   loss: {
     label: "Loss",
-    color: "hsl(var(--sl-chart-2))"
+    color: "var(--color-chart-5)"
   }
 } satisfies ChartConfig;
 
