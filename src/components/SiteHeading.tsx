@@ -1,12 +1,8 @@
-'use client';
-
 import React from "react";
-import { usePathname } from "next/navigation";
 
-export default function SiteHeading() {
-  const siteHeaderName = usePathname().split("/").at(-1)?.toUpperCase();
+export default function SiteHeading({ heading: siteHeaderName }: { heading: string }) {
 
   return (
-    <h1 className="font-medium ml-1">{siteHeaderName}</h1>
+    <h1 className="font-medium ml-1">{siteHeaderName.toUpperCase()}</h1>
   );
 }

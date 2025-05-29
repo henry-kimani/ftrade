@@ -19,10 +19,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
       <SidebarProvider defaultOpen={defaultOpen}>
         <AppSidebar />
         <div className="@container/main flex flex-col w-full">
-          <SiteHeader />
-          <div className="">
-            {children}
-          </div>
+          {children}
         </div>
       </SidebarProvider>
     </ThemeProvider>

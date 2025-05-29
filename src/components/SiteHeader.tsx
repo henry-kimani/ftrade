@@ -4,7 +4,10 @@ import { Separator } from "@/components/ui/separator";
 import SiteHeading from "@/components/SiteHeading";
 import ThemeToggle from "./ThemeToggle";
 
-export default function  SiteHeader() {
+export default function  SiteHeader(
+  { heading, children }:
+  { heading: string, children?: React.ReactNode }
+) {
 
   return(
     <header className="h-12 border-b flex items-center transition=[width,height] ease-linear">
@@ -12,7 +15,9 @@ export default function  SiteHeader() {
         <div className="flex items-center px-4 lg:px-6 gap-1 lg:gap-2">
           <SidebarTrigger className="-ml-1" />
           <Separator orientation="vertical" className=" data-[orientation=vertical]:h-4" />
-          <SiteHeading />
+          <SiteHeading heading={heading} />
+          { children && <Separator orientation="vertical" className="data-[orientation=vertical]:h-4" /> }
+          { children }
         </div>
 
         <div className="mr-4">
