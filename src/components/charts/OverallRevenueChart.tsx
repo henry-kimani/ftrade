@@ -26,7 +26,7 @@ const chartConfig = {
 export default function OverallRevenueChart() {
   return (
     <section>
-      <Card className="bg-transparent">
+      <Card className="bg-transparent border-0">
         <CardHeader>
           <CardTitle>Overall Revenue</CardTitle>
           <CardDescription>A bar chart representation of the total profit and loss</CardDescription>

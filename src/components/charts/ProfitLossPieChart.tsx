@@ -29,7 +29,7 @@ export default function ProfitLossPieChart() {
     >
       <PieChart>
         <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-        <Pie data={chartData} dataKey="amount" nameKey="revenue" />
+        <Pie data={chartData} label dataKey="amount" nameKey="revenue" />
       </PieChart>
     </ChartContainer>
   );

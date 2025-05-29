@@ -21,7 +21,7 @@
   margin-top: 1rem;
 }
 .emblaDotButton {
-  border: 2px solid var(--color-muted);
+  border: 2px solid var(--muted);
   touch-action: manipulation;
   display: inline-flex;
   text-decoration: none;

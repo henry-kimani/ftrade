@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
 import styles from "@/styles/ScreenshotCarousel.module.css";
@@ -15,17 +15,25 @@ export default function ScreenshotCarousel() {
   const [ selectedIndex, setSelectedIndex ] = useState(0);
 
   const scrollPrev = useCallback(() => {
-    if (emblaApi) emblaApi.scrollPrev();
+    if (emblaApi) {
+      emblaApi.scrollPrev();
+      setSelectedIndex(emblaApi.selectedScrollSnap());
+    }
   }, [emblaApi]);
 
   const scrollNext = useCallback(() => {
-    if (emblaApi) emblaApi.scrollNext();
+    if (emblaApi) {
+      emblaApi.scrollNext();
+      setSelectedIndex(emblaApi.selectedScrollSnap())
+    }
   }, [emblaApi]);
 
-  function onDotButtonClick(index: number) {
+  const onDotButtonClick = (index: number) => {
     emblaApi?.scrollTo(index);
     setSelectedIndex(index);
   }
+
+  console.log(emblaApi?.canScrollNext())
 
   return (
     <div className={styles.embla}>
@@ -66,8 +74,3 @@ export default function ScreenshotCarousel() {
   );
 }
 
-function DotButton({ index }: { index: number }) {
-  return (
-    <button />
-  );
-}
