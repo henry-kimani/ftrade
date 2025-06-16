@@ -1,0 +1,105 @@
+{
+  "id": "2a6536f3-5c71-4b09-a1cd-8f471a303123",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.allowed_users": {
+      "name": "allowed_users",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(50)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "role": {
+          "name": "role",
+          "type": "role",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'none'"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "allowed_users_id_users_id_fk": {
+          "name": "allowed_users_id_users_id_fk",
+          "tableFrom": "allowed_users",
+          "tableTo": "users",
+          "schemaTo": "auth",
+          "columnsFrom": [
+            "id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "allowed_users_email_unique": {
+          "name": "allowed_users_email_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "email"
+          ]
+        }
+      },
+      "policies": {
+        "Only an auth user with role viewer and admin can view": {
+          "name": "Only an auth user with role viewer and admin can view",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "authenticated"
+          ],
+          "using": "(SELECT \"allowed_users\".\"role\" FROM  allowed_users WHERE \"allowed_users\".\"id\" = (select auth.uid())) >= 'viewer'"
+        },
+        "Only an auth admin can add make changes": {
+          "name": "Only an auth admin can add make changes",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "authenticated"
+          ],
+          "using": "(SELECT \"allowed_users\".\"role\" FROM allowed_users WHERE \"allowed_users\".\"id\" = (select auth.uid())) = 'admin'",
+          "withCheck": "(SELECT \"allowed_users\".\"role\" FROM allowed_users WHERE \"allowed_users\".\"id\" = (select auth.uid())) = 'admin'"
+        }
+      },
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {
+    "public.role": {
+      "name": "role",
+      "schema": "public",
+      "values": [
+        "none",
+        "viewer",
+        "admin"
+      ]
+    }
+  },
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
