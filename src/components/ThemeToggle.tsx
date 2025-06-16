@@ -4,7 +4,6 @@ import React from "react";
 import { Moon, Sun } from "lucide-react";
 import { useTheme }  from "next-themes";
 
-import { Button } from "@/components/ui/button";
 import { 
   DropdownMenu,
   DropdownMenuTrigger, 
@@ -18,7 +17,7 @@ export default function ThemeToggle() {
   return (
     <DropdownMenu>
       {/* Trigger */}
-      <DropdownMenuTrigger className="grid place-items-center">
+      <DropdownMenuTrigger className="absolute z-20 right-5 top-1.5 grid place-items-center">
         <div className="border rounded-md p-2">
           <Sun className="h-[1.2rem] w-[1.2rem] transition-all dark:hidden" />
           <Moon className="hidden h-[1.2rem] w-[1.2rem] transition-all dark:block" />

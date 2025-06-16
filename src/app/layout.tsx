@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import React from "react";
 import "./globals.css";
-import { quicksand, roboto, nunito } from "@/fonts";
+import { quicksand } from "@/styles/fonts";
+import ThemeProvider from "@/components/ThemeProvider";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export const metadata: Metadata = {
   title: "FTrade",
@@ -19,7 +21,15 @@ export default async function RootLayout({
       <body
         className={`${quicksand.className} antialiased`}
       >
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <ThemeToggle />
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
