@@ -5,7 +5,7 @@ import {
   SidebarHeader,
   SidebarFooter
 } from "@/components/ui/sidebar";
-import { ChartCandlestick, CircleDollarSign, Goal } from "lucide-react";
+import { ChartCandlestick, CircleDollarSign, Goal, Settings } from "lucide-react";
 import { SidebarMenuItem } from "./ui/sidebar";
 import Link from "next/link";
 
@@ -19,6 +19,11 @@ const items = [
     title: "Trades",
     url: "/trades",
     icon: Goal
+  },
+  {
+    title: "Settings",
+    url: "/settings",
+    icon: Settings
   }
 ];
 

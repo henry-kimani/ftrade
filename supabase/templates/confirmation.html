@@ -1,0 +1,17 @@
+<h2>Ftrade | Confirm Your Sign Up</h2>
+
+<p>You have been invited into Ftrade with the role of {{ .Data.role }}</p>
+
+<p>Note this link is valid for only 5 minutes. If it expires before you
+sign up, please contact the admin</p>
+
+<p>Follow this link to confirm your </p>
+<p>
+  <a
+    href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email"
+  >
+    sign up
+  </a>
+</p>
+
+

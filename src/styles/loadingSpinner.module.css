@@ -1,0 +1,23 @@
+.loadingCon {
+  display: grid;
+  place-items: center;
+  height: 100dvh;
+}
+
+.loadingSpinner {
+  height: 4em;
+  width: 4em;
+  border-radius: 100%;
+  border: var(--color-muted) solid 10px;
+  border-top: var(--color-ring) solid 10px;
+  animation: loadingSpinnerAnim linear infinite .7s;
+}
+
+@keyframes loadingSpinnerAnim {
+  0% {
+    rotate: 0deg;
+  }
+  100% {
+    rotate: 360deg;
+  }
+}
