@@ -4,8 +4,11 @@ import StrategyCheckbox from "@/components/StrategyCheckbox";
 import Notes from "@/components/Notes";
 import React from "react";
 import SiteHeader from "@/components/SiteHeader";
+import { verifyUser } from "@/lib/dal";
 
-export default function Trades() {
+export default async function Trades() {
+  await verifyUser();
+
   return (
     <>
       <div>
