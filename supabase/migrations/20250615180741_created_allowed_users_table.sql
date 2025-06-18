@@ -34,19 +34,19 @@ TO "authenticated"
     (SELECT "allowed_users"."role" FROM allowed_users WHERE "allowed_users"."id" = (select auth.uid())) = 'admin'
   );
 --> statement-breakpoint
-CREATE OR REPLACE FUNCTION public.handle_new_user()
+CREATE OR REPLACE FUNCTION public.handle_new_user() 
 RETURNS TRIGGER
 SET search_path=''
 AS $$
   BEGIN
-    INSERT INTO public.allowed_users 
-      (id, email)
-    VALUES 
-      (new.id, new.email);
+    INSERT INTO public.allowed_users
+      (id, email, role)
+    VALUES
+      (NEW.id, NEW.email, (NEW.raw_user_meta_data->>'role')::"public"."role");
 
-    RETURN new;
+    RETURN NEW;
   END;
-$$ LANGUAGE plpgsql 
+$$ LANGUAGE plpgsql
 SECURITY DEFINER;
 --> statement-breakpoint
 CREATE OR REPLACE TRIGGER on_auth_user_created 
