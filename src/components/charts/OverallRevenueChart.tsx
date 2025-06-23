@@ -26,7 +26,7 @@ const chartConfig = {
 export default function OverallRevenueChart() {
   return (
     <section>
-      <Card className="bg-transparent border-0">
+      <Card className="">
         <CardHeader>
           <CardTitle>Overall Revenue</CardTitle>
           <CardDescription>A bar chart representation of the total profit and loss</CardDescription>
@@ -64,7 +64,7 @@ function DashboardLineChart() {
           dataKey="month" tickLine tickMargin={8} axisLine
           tickFormatter={value => value.slice(0, 3)}
         />
-        <Line 
+        <Line
           dataKey="desktop" 
           fill="var(--color-desktop)" 
           stroke="var(--color-desktop)" 
@@ -72,7 +72,6 @@ function DashboardLineChart() {
         />
         <ChartTooltip content={<ChartTooltipContent />} />
         <ReferenceLine y={160} stroke="var(--color-chart-5)" />
-        <ReferenceLine y={0} stroke="var(--color-accent)" />
       </LineChart>
     </ChartContainer>
   );

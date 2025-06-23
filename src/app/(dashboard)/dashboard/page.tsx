@@ -5,14 +5,17 @@ import SiteHeader from "@/components/SiteHeader";
 import { verifyUser } from "@/lib/dal";
 
 export default async function Dashboard() {
-  await verifyUser();
+  // await verifyUser();
 
   return (
     <>
       <div><SiteHeader heading="dashboard" /></div>
       <main className="grid p-4 gap-4">
         <SectionCards />
-        <OverallRevenueChart />
+        <div className="grid grid-cols-1 gap-4 @2xl/main:grid-cols-2">
+          <OverallRevenueChart />
+          <OverallRevenueChart />
+        </div>
       </main>
     </>
   );

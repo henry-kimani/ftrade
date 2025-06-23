@@ -33,8 +33,6 @@ export default function ScreenshotCarousel() {
     setSelectedIndex(index);
   }
 
-  console.log(emblaApi?.canScrollNext())
-
   return (
     <div className={styles.embla}>
       {/* Viewport */}

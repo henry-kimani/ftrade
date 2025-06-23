@@ -1,13 +1,14 @@
-import React from "react";
+import React, { Suspense } from "react";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupLabel, SidebarGroupContent,
   SidebarMenu, SidebarMenuButton,
   SidebarHeader,
   SidebarFooter
 } from "@/components/ui/sidebar";
-import { ChartCandlestick, CircleDollarSign, Goal, Settings } from "lucide-react";
+import { AlignHorizontalDistributeCenter, ChartCandlestick, CircleDollarSign, Goal, Settings } from "lucide-react";
 import { SidebarMenuItem } from "./ui/sidebar";
 import Link from "next/link";
+import UserProfile from "./UserProfile";
 
 const items = [
   {
@@ -21,9 +22,9 @@ const items = [
     icon: Goal
   },
   {
-    title: "Settings",
-    url: "/settings",
-    icon: Settings
+    title: "Trading View",
+    url: "/tradingview",
+    icon: AlignHorizontalDistributeCenter
   }
 ];
 
@@ -68,7 +69,18 @@ export default function AppSidebar() {
       {/* Footer */}
       <SidebarFooter>
         <SidebarMenu>
+          <SidebarMenuItem className="mb-2">
+            <SidebarMenuButton asChild>
+              <Link href="/settings">
+                <Settings />
+                <span>Settings</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
           <SidebarMenuItem>
+            <Suspense fallback="Loading...">
+              <UserProfile />
+            </Suspense>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
