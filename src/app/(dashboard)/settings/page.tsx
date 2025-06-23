@@ -8,7 +8,7 @@ export default function SettingsPage() {
       <div>
         <SiteHeader heading="Settings" />
       </div>
-      <main className="mt-4 max-w-[50rem] m-auto">
+      <main className="max-w-3xl m-auto p-4">
         <AllowedUsers />
       </main>
     </div>

@@ -1,12 +1,12 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
-import CreateUserModal from "@/components/CreateUserModal";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import CreateUserModal from "@/components/modals/CreateUserModal";
 import { Suspense } from "react";
-import AllowedUsersTable from "./AllowedUsersTable";
+import AllowedUsersTable from "@/components/tables/AllowedUsersTable";
 
 
 export default function AllowedUsers() {
   return (
-    <Card className="shadow-none bg-transparent border-none">
+    <Card className="@container/table">
       <CardHeader>
         <CardTitle className="text-lg">Allowed Users</CardTitle>
         <CardDescription className="text-md">
