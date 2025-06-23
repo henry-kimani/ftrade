@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import React from "react";
 import "./globals.css";
 import { quicksand } from "@/styles/fonts";
-import ThemeProvider from "@/components/ThemeProvider";
-import ThemeToggle from "@/components/ThemeToggle";
+import ThemeProvider from "@/components/theme/ThemeProvider";
+import ThemeToggle from "@/components/theme/ThemeToggle";
 
 export const metadata: Metadata = {
   title: "FTrade",
@@ -26,7 +26,7 @@ export default async function RootLayout({
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
-        >
+        > 
           <ThemeToggle />
           {children}
         </ThemeProvider>
