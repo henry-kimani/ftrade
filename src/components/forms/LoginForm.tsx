@@ -32,7 +32,12 @@ export default function LoginForm() {
           { state.errors?.email && <p id="email-error" className="mt-2 text-red-400">{state.errors.email}</p>}
           <Button>Log In</Button>
         </form>
-        {state.message && <p id="form-errors" className="mt-2 text-red-400">{state.message}</p>}
+        {state.message && 
+          state.message.startsWith("Success!") ?
+            <p id="form-errors" className="mt-2 text-green-400">{state.message}</p>
+          :
+            <p id="form-errors" className="mt-2 text-red-400">{state.message}</p>
+        }
       </CardContent>
     </Card>
   );
