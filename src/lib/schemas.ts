@@ -20,3 +20,7 @@ export const CreateUserSchema = z.object({
 export const LoginSchema = CreateUserSchema.omit({
   role: true
 })
+
+export const UpdateUserRoleSchema = CreateUserSchema.omit({
+  email: true 
+});
