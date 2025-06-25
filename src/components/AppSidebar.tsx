@@ -5,7 +5,7 @@ import {
   SidebarHeader,
   SidebarFooter
 } from "@/components/ui/sidebar";
-import { AlignHorizontalDistributeCenter, ChartCandlestick, CircleDollarSign, Goal, Settings } from "lucide-react";
+import { AlignHorizontalDistributeCenter, AppWindow, AppWindowIcon, CircleDollarSign, Goal, Settings } from "lucide-react";
 import { SidebarMenuItem } from "./ui/sidebar";
 import Link from "next/link";
 import UserProfile from "./UserProfile";
@@ -14,7 +14,7 @@ const items = [
   {
     title: "Dashboard",
     url: "/dashboard",
-    icon: ChartCandlestick 
+    icon: AppWindowIcon
   },
   {
     title: "Trades",
