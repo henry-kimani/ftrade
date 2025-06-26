@@ -9,5 +9,6 @@ export default defineConfig({
   },
   migrations: {
     prefix: "supabase"
-  }
+  },
+  casing: 'snake_case'
 });
