@@ -8,6 +8,13 @@
       "when": 1750010861864,
       "tag": "20250615180741_created_allowed_users_table",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1750939738052,
+      "tag": "20250626120858_created-core-tables",
+      "breakpoints": true
     }
   ]
 }
