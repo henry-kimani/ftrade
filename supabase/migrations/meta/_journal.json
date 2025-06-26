@@ -15,6 +15,13 @@
       "when": 1750939738052,
       "tag": "20250626120858_created-core-tables",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1750960526408,
+      "tag": "20250626175526_renamed-some-tables",
+      "breakpoints": true
     }
   ]
 }

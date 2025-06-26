@@ -4,6 +4,7 @@ import {
 } from "drizzle-orm/pg-core";
 import { authenticatedRole, authUid, authUsers } from "drizzle-orm/supabase";
 import { sql, InferEnum } from "drizzle-orm";
+import { timestamps } from "@/db/helpers";
 
 
 
@@ -50,8 +51,16 @@ export const accounts = pgTable('accounts', {
   accountBalance: integer().notNull(), // current account balance in meta trader
   leverage: smallint(), // the current leverage being used in the login
   tradeMode: boolean(), // the current_trade_mode in meta_trader
-  createdAt: timestamp({ withTimezone: true }).defaultNow(),
-  updatedAt: timestamp({ withTimezone: true }).defaultNow()
+  ...timestamps
+});
+
+
+/* Keeps track of the trading plans, to which a type of trading plan can have
+ * other many strategies. one-to-many relationship with strategies*/
+export const tradingPlans= pgTable('trading_plans', {
+  id: uuid().primaryKey().notNull().defaultRandom(),
+  tradingPlan: text().notNull(),
+  ...timestamps
 });
 
 
@@ -79,24 +88,13 @@ export const tradeStrategies = pgTable('trade_strategies', {
 });
 
 
-/* Keep track of the strategies that can be used in trades and what group those
+/* Keep track of the strategies that can be used in trades and what group(plans) those
  * strategies belong to. */
 export const strategies = pgTable('strategies', {
   id: uuid().primaryKey().defaultRandom().notNull(),
-  strategyTypesId: uuid().references(() => strategyTypes.id, { onDelete: 'cascade', onUpdate: 'cascade' }),// To tells us what group this strategy belongs to
+  tradingPlansId: uuid().references(() => tradingPlans.id, { onDelete: 'cascade', onUpdate: 'cascade' }),// To tells us what group this strategy belongs to
   strategy: text(),
-  createdAt: timestamp({ withTimezone: true }).defaultNow(),
-  updatedAt: timestamp({ withTimezone: true }).defaultNow()
-});
-
-
-/* Keeps track of the types of strategies, to which a type of strategy_type can have
- * other many strategies. one-to-many relationship with strategies*/
-export const strategyTypes = pgTable('strategy_types', {
-  id: uuid().primaryKey().notNull().defaultRandom(),
-  strategyType: text().notNull(),
-  createdAt: timestamp({ withTimezone: true }).defaultNow(),
-  updatedAt: timestamp({ withTimezone: true }).defaultNow()
+  ...timestamps
 });
 
 
@@ -105,8 +103,7 @@ export const notes = pgTable('notes', {
   id: uuid().primaryKey().defaultRandom().notNull(),
   note: text(), // can be null
   tradesId: uuid().references(() => trades.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
-  createdAt: timestamp({ withTimezone: true }).defaultNow(),
-  updatedAt: timestamp({ withTimezone: true }).defaultNow()
+  ...timestamps
 });
 
 
