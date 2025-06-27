@@ -1,6 +1,7 @@
 import {
   boolean, real, varchar,
-  integer, numeric, pgEnum, pgPolicy, pgTable, smallint, text, timestamp, uuid, 
+  integer, numeric, pgEnum, pgPolicy, pgTable, smallint, text, timestamp, uuid,
+  check, 
 } from "drizzle-orm/pg-core";
 import { authenticatedRole, authUid, authUsers } from "drizzle-orm/supabase";
 import { sql, InferEnum } from "drizzle-orm";
@@ -114,5 +115,23 @@ export const screenshotsUrls = pgTable('screenshots_urls', {
   screenshotUrl: text() // there can be nothing in the screenshots for a trade
 });
 
+
+export const phases = pgTable('phases', {
+  id: uuid().primaryKey().defaultRandom().notNull(),
+  phase: varchar({ length: 45 }).notNull(),
+  phaseColor: varchar({ length: 7 })
+}, (table) => [
+    check(
+      "color_hext_check",
+      sql`${table.phaseColor} IS NULL OR ${table.phaseColor} ~* '^#[a-f0-9]{6}$'`
+    ),
+  ]
+);
+
+export const tradePhases = pgTable('trade_phases', {
+  id: uuid().primaryKey().notNull().defaultRandom(),
+  tradesId: uuid().references(() => trades.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
+  phasesId: uuid().references(() => phases.id, { onDelete: 'cascade', onUpdate: 'cascade' })
+});
 
 
