@@ -1,5 +1,6 @@
 CREATE OR REPLACE FUNCTION public.insert_ratio_func()
 RETURNS TRIGGER
+SET search_path=''
 AS $$
   BEGIN
     IF NEW.stop_loss = 0 THEN -- account for division by 0
@@ -20,6 +21,7 @@ FOR EACH ROW EXECUTE PROCEDURE public.insert_ratio_func();
 
 CREATE OR REPLACE FUNCTION public.update_timestamp_func()
 RETURNS TRIGGER
+SET search_path=''
 AS $$
   BEGIN
     NEW.updated_at = CURRENT_TIMESTAMP;
