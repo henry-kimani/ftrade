@@ -24,14 +24,10 @@ export const allowedUsers = pgTable('allowed_users', {
   email: varchar({ length: 50 }).unique().notNull(),
   role: roles().notNull().default("none")
   }, (table) => [
-    pgPolicy('Only an auth user with role viewer and admin can view', {
-      to: authenticatedRole,
-      for: 'select',
-      using: sql`(SELECT ${table.role} FROM  allowed_users WHERE ${table.id} = ${authUid}) >= 'viewer'`,
-    }),
     pgPolicy('Only an auth admin can add make changes', {
       to: authenticatedRole,
       for: "all",
+      using: sql`(SELECT ${table.role} FROM allowed_users WHERE ${table.id} = ${authUid}) >= 'viewer'`,
       /* For INSERT, UPDATE and DELETE commands, only allow the to run if the 
        * current user is and admin */
       withCheck: sql`(SELECT ${table.role} FROM allowed_users WHERE ${table.id} = ${authUid}) = 'admin'`,
@@ -79,6 +75,7 @@ export const trades = pgTable('trades', {
   stopLoss: numeric({ precision: 10, scale: 5}).notNull(), // 12345.12345
   ratio: real(), // can be an approximation since its determined at runtime and rounded up
   profitInCents: integer().notNull(),
+  phasesId: uuid().references(() => phases.id, { onDelete: 'cascade', onUpdate: 'cascade' })
 });
 
 /* Keep track of the many-to-many relationship between trades and strategies */ 
@@ -127,11 +124,3 @@ export const phases = pgTable('phases', {
     ),
   ]
 );
-
-export const tradePhases = pgTable('trade_phases', {
-  id: uuid().primaryKey().notNull().defaultRandom(),
-  tradesId: uuid().references(() => trades.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
-  phasesId: uuid().references(() => phases.id, { onDelete: 'cascade', onUpdate: 'cascade' })
-});
-
-
