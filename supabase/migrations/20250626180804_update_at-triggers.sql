@@ -15,7 +15,7 @@ $$ LANGUAGE plpgsql
 SECURITY INVOKER;
 --> statement-breakpoint
 CREATE OR REPLACE TRIGGER on_trade_insert_trg
-AFTER INSERT ON public.trades
+BEFORE INSERT ON public.trades
 FOR EACH ROW EXECUTE PROCEDURE public.insert_ratio_func();
 --> statement-breakpoint
 
@@ -25,6 +25,7 @@ SET search_path=''
 AS $$
   BEGIN
     NEW.updated_at = CURRENT_TIMESTAMP;
+    RETURN NEW;
   END;
 $$ LANGUAGE plpgsql
 SECURITY INVOKER;
