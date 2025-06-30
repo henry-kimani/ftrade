@@ -1,4 +1,4 @@
-import { allowedUsers, Role } from "@/db/schema";
+import { allowedUsers, Role, trades } from "@/db/schema";
 import { db } from "@/db/dbConn";
 import { eq, sql } from "drizzle-orm";
 
@@ -65,4 +65,30 @@ export async function updateUserRole(userId: string, role: Role) {
     .update(allowedUsers)
     .set({ role: role })
     .where(eq(allowedUsers.id, userId));
+}
+
+
+/* Get each trade date and its id, will be used to get a specific date in the 
+ * trades page. */
+export async function getTradeDates() {
+  return db.select({
+    id: trades.id,
+    entryTime: trades.entryTime,
+  }).from(trades);
+}
+
+
+export async function getTrades() {
+  return db.select({
+    id: trades.id,
+    entryTime: trades.entryTime,
+    exitTime: trades.exitTime,
+    entryPrice: trades.entryPrice,
+    exitPrice: trades.exitPrice,
+    lotSize: trades.lotSize,
+    ratio: trades.ratio,
+    takeProfit: trades.takeProfit,
+    stopLoss: trades.stopLoss,
+    profitInCents: trades.profitInCents
+  }).from(trades);
 }
