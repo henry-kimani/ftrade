@@ -2,17 +2,24 @@ import Metrics from "@/components/Metrics";
 import ScreenshotCarousel from "@/components/ScreenshotCarousel";
 import Strategy from "@/components/strategy/Strategy";
 import Notes from "@/components/Notes";
-import React from "react";
+import React, { Suspense } from "react";
 import SiteHeader from "@/components/SiteHeader";
 import { verifyUser } from "@/lib/dal";
 import TradesCalendar from "@/components/calenders/TradesCalender";
 import { getTradeDates } from "@/db/queries";
 import { GroupedDatesType } from "@/lib/definitions";
 
-export default async function Trades() {
+export default async function Trades(props: {
+  searchParams?: Promise<{ trade?: string; }>
+}) {
   await verifyUser();
 
   const dates = await groupedDates();
+
+  const searchParams = await props.searchParams;
+
+  // Set latest trade as the default on initial page load
+  const selectedTradeId = searchParams?.trade || dates.at(-1)?.dates.at(-1)?.id || "";
 
   return (
     <>
@@ -27,11 +34,15 @@ export default async function Trades() {
         </div>
 
         <div className="grid mb-4">
-          <Strategy />
+          <Suspense fallback="Loading Strategies...">
+            <Strategy tradeId={selectedTradeId} />
+          </Suspense>
         </div>
 
         <div className="mb-4">
-          <Metrics />
+          <Suspense fallback="Loading Metrics ...">
+            <Metrics />
+          </Suspense>
         </div>
 
         <div>

@@ -2,16 +2,31 @@
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { Calendar1, Check } from "lucide-react";
-import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
-import { GroupedDatesType } from "@/lib/definitions";
+import { GroupedDatesType, SelectedDate } from "@/lib/definitions";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
 
 export default function TradesCalendar(
   { groupedDates }:
   { groupedDates: GroupedDatesType }
 ) {
-  const [ selectedDate, setSelectedDate ] = useState<{ id: string, currentDate: Date } | undefined>();
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { replace } = useRouter();
+
+  function handleSearchTrade(date: SelectedDate) {
+    // provides methods to work with search params instead of using complex strings
+    const params = new URLSearchParams(searchParams);
+
+    if (date?.id){
+      params.set('trade', date.id);
+    } else {
+      params.delete('trade');
+    }
+
+    replace(`${pathname}?${params.toString()}`)
+  }
 
   return (
     <div>
@@ -26,11 +41,7 @@ export default function TradesCalendar(
                   size="default"
                   variant={"outline"}
                 >
-                  { 
-                    selectedDate ?
-                      <span className="">{format(selectedDate?.currentDate, "E PPP")}</span> 
-                      : <span className="hidden @sm/main:block text-ellipsis">Select a date</span>
-                  }
+                  <span>Select a trade</span>
                   <Calendar1 />
                 </Button>
               </PopoverTrigger>
@@ -41,18 +52,18 @@ export default function TradesCalendar(
                     <CommandInput placeholder="Search a trade by date" />
                     <CommandList>
                       <CommandEmpty>No results found.</CommandEmpty>
-                      {groupedDates.map(date => (
-                        <CommandGroup heading={
+                      {groupedDates.map((date, index) => (
+                        <CommandGroup key={index} heading={
                           <div>
-                            {format(new Date(date.year, date.month, 0), "MMM Y").toUpperCase()}
+                            {format(new Date(date.year, date.month, 0), "MMM y").toUpperCase()}
                           </div>
                         }>
                           {date.dates.map(({ id, day }) => {
                             const currentDate = new Date(date.year, date.month, day);
                             return (
-                              <CommandItem >
+                              <CommandItem key={day}>
                                 <Button 
-                                  onClick={() => setSelectedDate({ id, currentDate })}
+                                  onClick={() => handleSearchTrade({ id, currentDate })}
                                   variant="ghost"
                                 >
                                   {format(currentDate, "E PPP")}
