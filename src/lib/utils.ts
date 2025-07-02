@@ -10,3 +10,8 @@ export function toSentenceCase(string: string) {
   const matchFirstChar = /^./gi;
   return string.replace(matchFirstChar, capitalizedChar);
 }
+
+export function isObjEmpty(obj: Object) {
+  for (let i in obj) return true;
+  return false;
+}
