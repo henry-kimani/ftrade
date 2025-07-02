@@ -33,7 +33,6 @@ function TradingViewWidget(
           "studies": [${indicators?.map(indicator => `"${indicator}"`)}],
           "support_host": "https://www.tradingview.com"
         }`;
-      console.log(script.innerHTML);
       container.current?.replaceChildren(script)
     },
     [ indicators, theme ]

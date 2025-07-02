@@ -43,6 +43,7 @@ export default function TradingView(
         </SiteHeader>
       </div>
       <div className="h-svh max-h-11/12">
+        {/* Re-renders when props changes */}
         <TradingViewWidget indicators={indicators} />
       </div>
     </>
