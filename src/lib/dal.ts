@@ -19,3 +19,15 @@ export const verifyUser = cache(async () => {
 
   return data;
 });
+
+export const verifyAction = cache(async () => {
+  const supabase  = await createClient();
+
+  const { error, data: { user } } = await supabase.auth.getUser();
+
+  if (error || !user) {
+    return { message: "You are not signed in." }
+  };
+
+  return user;
+})

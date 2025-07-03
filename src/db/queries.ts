@@ -1,6 +1,7 @@
-import { allowedUsers, Role, trades } from "@/db/schema";
+import { allowedUsers, Role, strategies, trades, tradeStrategies, tradingPlans } from "@/db/schema";
 import { db } from "@/db/dbConn";
 import { eq, sql } from "drizzle-orm";
+import { PgSelect } from "drizzle-orm/pg-core";
 
 /* Check if the user is in the allowed_users table */
 type UserId = { id: string; };
@@ -91,4 +92,51 @@ export async function getTrades() {
     stopLoss: trades.stopLoss,
     profitInCents: trades.profitInCents
   }).from(trades);
+}
+
+
+/* Get the strategies and their trading plans for a trade */
+export async function getStrategiesWithTradingPlans(tradeId: string){
+  return db.select({
+    strategy: strategies.strategy,
+    tradingPlan: tradingPlans.tradingPlan,
+  }).from(strategies)
+    .where(eq(tradeStrategies.tradesId, tradeId))
+    .innerJoin(tradingPlans, eq(tradingPlans.id, strategies.tradingPlansId))
+    .innerJoin(tradeStrategies, eq(strategies.id, tradeStrategies.strategiesId));
+}
+
+
+/* Get the trading plans and their strategies to be used to add new strategies */
+export async function getAllTradingPlansAndTheirStrategies() {
+  return db.select({
+    tradingPlan: tradingPlans.tradingPlan,
+    strategy: strategies.strategy
+  }).from(tradingPlans)
+    .innerJoin(strategies, eq(tradingPlans.id, strategies.tradingPlansId));
+}
+
+
+export async function updateTradeStrategies(
+  { tradeId, newStrategies }:
+  {
+    tradeId: string;
+    newStrategies: string[]
+  }
+) {
+  /* 1. Delete existing */
+  await db.delete(tradeStrategies).where(eq(tradeStrategies.tradesId, tradeId));
+
+  const cte = db.$with('cte_strategies').as(
+    db.select({ 
+      strategiesId: strategies.id,
+      strategy: strategies.strategy
+    }).from(strategies)
+  )
+
+  return db.with(cte).insert(tradeStrategies)
+    .values(newStrategies.map(newStrategy => ({
+      tradesId: tradeId,
+      strategiesId: sql<string>`(SELECT ${cte.strategiesId} FROM ${cte} WHERE (${cte.strategy} = ${newStrategy}))`
+    })))
 }

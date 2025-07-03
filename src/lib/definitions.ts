@@ -18,7 +18,6 @@ export type SelectedStrategies = Record<string, {
 }> | undefined;
 
 export type UpdateTradeStrategies = { 
-  [x: string]: {
-    strategies: string[]
-  } | string | undefined;
+  tradeId: string;
+  newStrategies: string[];
 }

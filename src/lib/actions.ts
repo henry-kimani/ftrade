@@ -1,10 +1,12 @@
 'use server';
 
-import { CreateUserSchema, LoginSchema, State, UpdateUserRoleSchema } from "@/lib/schemas";
+import { CreateUserSchema, LoginSchema, State, UpdateTradeStrategiesSchema, UpdateUserRoleSchema } from "@/lib/schemas";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { isAllowedUser, getUserRole, isUserAdmin, updateUserRole } from "@/db/queries";
+import { isAllowedUser, getUserRole, isUserAdmin, updateUserRole, updateTradeStrategies } from "@/db/queries";
+import { verifyAction } from "./dal";
+import { UpdateTradeStrategies } from "./definitions";
 
 
 
@@ -23,7 +25,6 @@ export async function login(prevState: State, formData: FormData) {
   }
 
   const shouldCreateUser = validatedValues.data.email === process.env.INITIAL_ADMIN;
-  console.log(shouldCreateUser);
 
   /* Signin the user */
   const { error: signInError } = await supabase.auth.signInWithOtp({
@@ -37,7 +38,6 @@ export async function login(prevState: State, formData: FormData) {
   });
 
   if (signInError) {
-    console.log(signInError);
     return { message: "Are sure you are a valid user?" };
   } else {
     return { message: `Success! Now check the email ${validatedValues.data.email}`};
@@ -62,13 +62,13 @@ export async function createUser(prevState: State, formData: FormData) {
   }
 
   // If the current user is an admin allow the insert 
-  const { error, data: userData } = await supabase.auth.getUser();
+  const { error, data: { user } } = await supabase.auth.getUser();
 
-  if (error || !userData.user) {
+  if (error || !user) {
     return { message: "You are not a signed in user." };
   }
 
-  const userId = userData.user.id;
+  const userId = user.id;
 
   try {
     const userRole = await getUserRole(userId);
@@ -156,4 +156,41 @@ export async function updateUserRoleAction(userId: string, prevState: State, for
 }
 
 
+export async function updateTradeStrategiesAction(formData: FormData) {
 
+  // Check user is admin
+  const user = await verifyAction();
+
+  if ('message' in user) {
+    return user;
+  } 
+
+  const isAdmin = isUserAdmin(user.id);
+
+  if (!isAdmin) {
+    return { message: "You are not an admin" };
+  }
+
+  const validatedValues = UpdateTradeStrategiesSchema.safeParse({
+    tradeStrategies: formData.get('trade-strategies'),
+  });
+
+  if (!validatedValues.success) {
+    return {
+      errors: validatedValues.error.flatten().fieldErrors,
+      message: "Check your values."
+    }
+  }
+
+  const { tradeId, newStrategies }: UpdateTradeStrategies = JSON.parse(validatedValues.data.tradeStrategies);
+
+  try {
+    await updateTradeStrategies({ tradeId, newStrategies });
+  } catch(error) {
+    console.error("Database Error: ", error);
+    return { message: "Database Error" };
+  }
+
+  revalidatePath("/trades");
+  return { message: "Success!" }
+}

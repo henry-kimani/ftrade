@@ -24,3 +24,10 @@ export const LoginSchema = CreateUserSchema.omit({
 export const UpdateUserRoleSchema = CreateUserSchema.omit({
   email: true 
 });
+
+export const UpdateTradeStrategiesSchema = z.object({
+  tradeStrategies: z.string({ 
+    invalid_type_error: "Only characters are allowed.",
+    message: "Invalid trade strategies"
+  })
+});

@@ -11,8 +11,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Label } from "../ui/label";
 import { Checkbox } from "../ui/checkbox";
 import { CheckedState } from "@radix-ui/react-checkbox";
-import { type SelectedStrategies } from "@/lib/definitions";
-import { updateTradeStrategies } from "@/lib/actions";
+import { UpdateTradeStrategies, type SelectedStrategies } from "@/lib/definitions";
+import { updateTradeStrategiesAction } from "@/lib/actions";
 
 
 export default function AddStrategyForm(
@@ -82,13 +82,15 @@ export default function AddStrategyForm(
     }
   }
 
-  function formAction(formData: FormData) {
-    const data = {
+  async function formAction(formData: FormData) {
+    const newStrategies = Object.values(selectedStrategies)
+    .flatMap(selectedStrategy => selectedStrategy.strategies)
+    const data: UpdateTradeStrategies = {
       tradeId,
-      ...selectedStrategies,
+      newStrategies,
     }
     formData.append("trade-strategies", JSON.stringify(data));
-    updateTradeStrategies(formData);
+    await updateTradeStrategiesAction(formData);
   }
 
   return (
