@@ -1,10 +1,18 @@
 'use server';
 
-import { CreateUserSchema, LoginSchema, State, UpdateTradeStrategiesSchema, UpdateUserRoleSchema } from "@/lib/schemas";
+import {
+  CreateUserSchema, EdittedTradingPlansSchema, LoginSchema, NewTradingPlansSchema, State, 
+  UpdateTradeStrategiesSchema, UpdateUserRoleSchema 
+} from "@/lib/schemas";
+import {
+  isAllowedUser, getUserRole, isUserAdmin, updateUserRole, newTradingPlan, 
+  updateTradeStrategiesForTrade, 
+  deleteTradingPlan,
+  updateUpdatedTradingPlans
+} from "@/db/queries";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { isAllowedUser, getUserRole, isUserAdmin, updateUserRole, updateTradeStrategies } from "@/db/queries";
 import { verifyAction } from "./dal";
 import { UpdateTradeStrategies } from "./definitions";
 
@@ -104,7 +112,6 @@ export async function createUser(prevState: State, formData: FormData) {
   });
 
   if (signInError) {
-    console.error("Error", signInError);
     return { message: "An error occured while creating user. Try again." };
   }
 
@@ -162,10 +169,10 @@ export async function updateTradeStrategiesAction(formData: FormData) {
   const user = await verifyAction();
 
   if ('message' in user) {
-    return user;
+    return { message: user.message };
   } 
 
-  const isAdmin = isUserAdmin(user.id);
+  const isAdmin = await isUserAdmin(user.id);
 
   if (!isAdmin) {
     return { message: "You are not an admin" };
@@ -185,12 +192,127 @@ export async function updateTradeStrategiesAction(formData: FormData) {
   const { tradeId, newStrategies }: UpdateTradeStrategies = JSON.parse(validatedValues.data.tradeStrategies);
 
   try {
-    await updateTradeStrategies({ tradeId, newStrategies });
+    await updateTradeStrategiesForTrade({ tradeId, newStrategies });
   } catch(error) {
-    console.error("Database Error: ", error);
     return { message: "Database Error" };
   }
 
   revalidatePath("/trades");
   return { message: "Success!" }
+}
+
+
+export async function newTradingPlansAction(prevState: State, formData: FormData) {
+
+  const validatedValues = NewTradingPlansSchema.safeParse({
+    tradingPlan: formData.get("trading-plan"),
+    strategies: formData.getAll("strategies"),
+  })
+
+  if (!validatedValues.success) {
+    return {
+      errors: validatedValues.error.flatten().fieldErrors,
+      message: "Check your values",
+    }
+  }
+  const user = await verifyAction();
+
+  if ("message" in user) return { message: user.message };
+
+  const isAdmin = await isUserAdmin(user.id);
+
+  if (!isAdmin) {
+    return { message: "You are not an admin" };
+  }
+
+  try {
+    await newTradingPlan({
+      tradingPlan: validatedValues.data.tradingPlan,
+      newStrategies: validatedValues.data.strategies
+    });
+  } catch(error) {
+    return { message: "An error occured" }
+  }
+
+  revalidatePath("/settings");
+}
+
+
+
+export async function deleteTradingPlanAction(id: string) {
+
+  const user = await verifyAction();
+
+  if ("message" in user) {
+    return { "message": user.message };
+  }
+
+  const isAdmin = await isUserAdmin(user.id);
+
+  if (!isAdmin) {
+    return { "message": "You are not an admin." };
+  }
+
+  try {
+    await deleteTradingPlan({ tradingPlanId: id });
+  } catch {
+    return { message: "An error occured" };
+  }
+
+  revalidatePath("/settings");
+  redirect("/settings");
+}
+
+
+
+export async function updateEdittedTradingPlanAction(tradingPlanId: string, formData: FormData) {
+
+  const user = await verifyAction();
+
+  if ("message" in user) {
+    return { "message": user.message };
+  }
+
+  const isAdmin = await isUserAdmin(user.id);
+
+  if (!isAdmin) {
+    return { message: "You are not an admin" };
+  }
+
+  const editted = formData.get("edit-strategies");
+
+  if (!editted) {
+    return { message: "It would be better if you deleted the trading plan instead." };
+  }
+
+  const validatedValues = EdittedTradingPlansSchema.safeParse({
+    tradingPlan: formData.get("trading-plan"),
+    edittedStrategies: JSON.parse(editted.toString()),
+    newStrategies: formData.getAll("new-strategies"),
+  });
+
+  if (!validatedValues.success) {
+    return {
+      error: validatedValues.error.flatten().fieldErrors,
+      message: "Check your values",
+    }
+  }
+
+  try {
+    const { tradingPlan, edittedStrategies, newStrategies } = validatedValues.data;
+
+    await updateUpdatedTradingPlans({ 
+      tp: {
+        tradingPlanId, tradingPlan
+      },
+      editted: edittedStrategies,
+      newStrats: (newStrategies && newStrategies.length > 0) ? newStrategies : undefined,
+    })
+  } catch (error) {
+    console.log(error)
+    return { message: "An error occured" }
+  }
+
+  revalidatePath("/settings");
+  redirect("/settings");
 }

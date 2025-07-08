@@ -31,3 +31,27 @@ export const UpdateTradeStrategiesSchema = z.object({
     message: "Invalid trade strategies"
   })
 });
+
+export const NewTradingPlansSchema = z.object({
+  tradingPlan: z
+    .string({ invalid_type_error: "Only characters are allowed"})
+    .min(3, { message: "Should be at least 3 characters"}),
+  strategies: z.array(
+    z.string({ invalid_type_error: "Only characters are allowed" })
+    .min(3, { message: "Should be at least 3 characters" }),
+    { invalid_type_error: "Should be an array" }
+  ).min(1, { message: "At least one strategy is required." })
+});
+
+export const EdittedTradingPlansSchema = z.object({
+  tradingPlan: z.string().min(3, { message: "Required at least three characters." }),
+  edittedStrategies: z.array(
+    z.object({
+      strategyId: z.string().uuid({ message: "Wrong editted strategy Id" }),
+      strategy: z.string().min(3, { message: "Required at least three characters." })
+    })
+  ),
+  newStrategies: z.array(
+    z.string().min(3, { message: "Required at least three characters." })
+  ).nullish()
+});

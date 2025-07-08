@@ -13,11 +13,28 @@ export type SelectedDate = {
   currentDate: Date
 }| undefined;
 
-export type SelectedStrategies = Record<string, {
+export type GroupedStrategies = Record<string, {
   strategies: string[];
 }> | undefined;
+
+export type GroupedStrategiesWithIds = {
+  tradingPlanId: string;
+  tradingPlan: string;
+  strategiesWithIds: {
+    strategyId: string;
+    strategy: string;
+  }[];
+};
 
 export type UpdateTradeStrategies = { 
   tradeId: string;
   newStrategies: string[];
-}
+};
+
+export type GroupedTradingPlanStrategiesWithId = {
+  tradingPlanId: string;
+  tradingPlan: string;
+  strategies: string[];
+}[];
+
+

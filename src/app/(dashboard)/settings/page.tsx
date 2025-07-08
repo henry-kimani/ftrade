@@ -1,15 +1,21 @@
 import SiteHeader from "@/components/SiteHeader";
 import AllowedUsers from "@/components/tables/AllowedUsers";
-import Link from "next/link";
+import TradingPlans from "@/components/tradingplan/TradingPlans";
 
-export default function SettingsPage() {
+export default async function SettingsPage() {
+
   return (
     <div>
       <div>
         <SiteHeader heading="Settings" />
       </div>
-      <main className="max-w-3xl m-auto p-4">
-        <AllowedUsers />
+      <main className="max-w-3xl m-auto p-4 grid gap-4">
+        <div>
+          <AllowedUsers />
+        </div>
+        <div>
+          <TradingPlans />
+        </div>
       </main>
     </div>
   );
