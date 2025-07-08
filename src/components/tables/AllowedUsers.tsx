@@ -9,7 +9,7 @@ export default function AllowedUsers() {
     <Card className="@container/table">
       <CardHeader>
         <CardTitle className="text-lg">Allowed Users</CardTitle>
-        <CardDescription className="text-md">
+        <CardDescription className="">
           The list of the only allowed users and their roles.
         </CardDescription>
       </CardHeader>
