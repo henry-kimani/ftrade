@@ -2,13 +2,16 @@
 
 import {
   CreateUserSchema, EdittedTradingPlansSchema, LoginSchema, NewTradingPlansSchema, State, 
+  UpdatedNoteSchema, 
   UpdateTradeStrategiesSchema, UpdateUserRoleSchema 
 } from "@/lib/schemas";
 import {
   isAllowedUser, getUserRole, isUserAdmin, updateUserRole, newTradingPlan, 
   updateTradeStrategiesForTrade, 
   deleteTradingPlan,
-  updateEdittedTradingPlans
+  updateEdittedTradingPlans,
+  createNote,
+  saveNote
 } from "@/db/queries";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -315,4 +318,61 @@ export async function updateEdittedTradingPlanAction(tradingPlanId: string, form
 
   revalidatePath("/settings");
   redirect("/settings");
+}
+
+export async function createNoteAction(tradeId: string) {
+
+  const user = await verifyAction();
+
+  if ("message" in user) {
+    return { message: user.message };
+  }
+
+  const isAdmin = await isUserAdmin(user.id);
+
+  if (!isAdmin) {
+    return { message: "You are not an admin" }
+  }
+
+  try {
+    await createNote(tradeId);
+  } catch {
+    return { "message": "An error occurred." }
+  }
+
+  revalidatePath("/trades");
+}
+
+export async function updateNoteAction(
+  noteId: string, tradeId: string, formData: FormData
+) {
+
+  const user = await verifyAction();
+
+  if ("message" in user) {
+    return { message: user.message };
+  }
+
+  const isAdmin = await isUserAdmin(user.id);
+
+  if (!isAdmin) {
+    return { message: "You are not an admin" }
+  }
+
+  const validatedValues = UpdatedNoteSchema.safeParse({
+    note: formData.get('note'),
+  });
+
+  if (!validatedValues.success) {
+    return {
+      errors: validatedValues.error.flatten().fieldErrors,
+      message: "Check your values"
+    }
+  }
+
+  try {
+    await saveNote(noteId, validatedValues.data.note, tradeId);
+  } catch {
+    return { message: "An error occured." };
+  }
 }

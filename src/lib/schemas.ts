@@ -55,3 +55,7 @@ export const EdittedTradingPlansSchema = z.object({
     z.string().min(3, { message: "Required at least three characters." })
   ).nullish()
 });
+
+export const UpdatedNoteSchema = z.object({
+  note: z.string({ invalid_type_error: "Should include only characters." })
+});

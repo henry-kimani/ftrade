@@ -1,4 +1,4 @@
-import { allowedUsers, Role, strategies, trades, tradeStrategies, tradingPlans } from "@/db/schema";
+import { allowedUsers, notes, Role, strategies, trades, tradeStrategies, tradingPlans } from "@/db/schema";
 import { db } from "@/db/dbConn";
 import { desc, and, eq, ilike, like, notInArray, or, sql, count } from "drizzle-orm";
 
@@ -257,4 +257,44 @@ export async function getTradesPages(query: string) {
     console.error("Database Error:", error);
     throw new Error('Failed to fetch trade\'s pages')
   }
+}
+
+
+export async function getNote(tradeId: string) {
+  try {
+    const note = await db.select({
+      noteId: notes.id,
+      note: notes.note,
+      createdAt: notes.createdAt,
+      updatedAt: notes.updatedAt
+    }).from(notes)
+      .where(eq(notes.tradesId, tradeId));
+
+    return note[FIRST_RESULT];
+  } catch(error) {
+    throw new Error("Failed to get note");
+  }
+}
+
+
+export async function createNote(tradeId: string) {
+  try {
+    await db.insert(notes).values({
+      tradesId: tradeId
+    });
+  } catch(error) {
+    throw new Error("Failed to create Note");
+  }
+}
+
+
+export async function saveNote(noteId: string, note: string, tradeId: string) {
+  await db.update(notes).set({
+    note,
+  }).where(
+    and(
+      eq(notes.id, noteId),
+      eq(notes.tradesId, tradeId)
+    )
+  );
 }
