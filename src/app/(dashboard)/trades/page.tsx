@@ -1,82 +1,46 @@
-import Metrics from "@/components/Metrics";
-import ScreenshotCarousel from "@/components/ScreenshotCarousel";
-import Strategy from "@/components/strategy/Strategy";
-import Notes from "@/components/Notes";
-import React, { Suspense } from "react";
 import SiteHeader from "@/components/SiteHeader";
 import { verifyUser } from "@/lib/dal";
-import TradesCalendar from "@/components/calenders/TradesCalender";
-import { getTradeDates } from "@/db/queries";
-import { GroupedDatesType } from "@/lib/definitions";
+import SearchTrade from "@/components/SearchTrade";
+import TradesTable from "@/components/tables/TradesTable";
+import Pagination from "@/components/Pagination";
+import { getTradesPages } from "@/db/queries";
 
 export default async function Trades(props: {
-  searchParams?: Promise<{ trade?: string; }>
+  searchParams?: Promise<{
+    search?: string;
+    page?: string;
+  }>
 }) {
   await verifyUser();
 
-  const dates = await groupedDates();
-
   const searchParams = await props.searchParams;
+  const searchTerm = searchParams?.search || "";
+  const currentPage = Number(searchParams?.page) || 1; // default to page 1
 
-  // Set latest trade as the default on initial page load
-  const selectedTradeId = searchParams?.trade || dates.at(-1)?.dates.at(-1)?.id || "";
+  /* Return the total number of pages based on the query */
+  const totalPages = await getTradesPages(searchTerm);
 
   return (
     <>
       <div className="top-0 fixed w-full z-10 bg-background">
-        <SiteHeader heading="trades">
-          <TradesCalendar groupedDates={dates} />
-        </SiteHeader>
+        <SiteHeader heading="trades" />
       </div>
-      <main className="max-w-3xl m-auto p-4 mt-12">
-        <div className="grid place-items-center mb-8">
-          <ScreenshotCarousel />
-        </div>
+      <main className="m-auto p-4 mt-12">
 
-        <div className="grid mb-4">
-          <Suspense fallback="Loading Strategies...">
-            <Strategy tradeId={selectedTradeId} />
-          </Suspense>
-        </div>
-
-        <div className="mb-4">
-          <Suspense fallback="Loading Metrics ...">
-            <Metrics />
-          </Suspense>
+        <div className="mb-8 w-full">
+          <SearchTrade />
         </div>
 
         <div>
-          <Notes />
+          <TradesTable query={searchTerm} currentPage={currentPage} />
+        </div>
+
+        <div className="grid place-items-center mt-4">
+          <Pagination totalPages={totalPages} />
         </div>
       </main>
     </>
   );
 }
 
-async function groupedDates(): Promise<GroupedDatesType> {
-  // https://stackoverflow.com/questions/65678337/how-to-group-array-of-dates-by-month-and-year
-  const tradeDates = await getTradeDates();
 
-  return Object.values(tradeDates.reduce((accumulator, currentDate) => {
-    const year = currentDate.entryTime.getFullYear();
-    const month =  currentDate.entryTime.getMonth();
-    const day = currentDate.entryTime.getDay();
-
-    /* "When grouping things in general, its much easier to group them into an
-     * object. Reason, is you don't have to search an array for a matching result
-     * to append to, you only have to look up for a key to concatenate to." */
-
-    /* The accumulator will have the values that have accumulated over time .
-     * First, create a key, if not exists, which will be used as a unique 
-     * identifier when we group.
-     * For each date, concatenate it to the unique key constructed, if the key
-     * it constructs exists, it is reused */
-    const key = `${year}_${month}`; // Create a key to concatenate to
-    // create a new key, if it exists add the following object to that object
-    accumulator[key] = accumulator[key] || { month, year, dates: []};
-    // Add the dates with their id's
-    accumulator[key].dates.push({ id: currentDate.id, day });
-
-    return accumulator;
-  }, {}));
-}

@@ -1,8 +1,9 @@
 import { allowedUsers, Role, strategies, trades, tradeStrategies, tradingPlans } from "@/db/schema";
 import { db } from "@/db/dbConn";
-import { and, eq, inArray, notInArray, sql } from "drizzle-orm";
+import { desc, and, eq, ilike, like, notInArray, or, sql, count } from "drizzle-orm";
 
 const FIRST_RESULT = 0;
+const ITEMS_PER_PAGE = 6;
 
 /* Check if the user is in the allowed_users table */
 type UserId = { id: string; };
@@ -63,29 +64,14 @@ export async function updateUserRole(userId: string, role: Role) {
 }
 
 
-/* Get each trade date and its id, will be used to get a specific date in the 
- * trades page. */
-export async function getTradeDates() {
-  return db.select({
-    id: trades.id,
-    entryTime: trades.entryTime,
-  }).from(trades);
-}
-
-
-export async function getTrades() {
-  return db.select({
-    id: trades.id,
-    entryTime: trades.entryTime,
-    exitTime: trades.exitTime,
-    entryPrice: trades.entryPrice,
-    exitPrice: trades.exitPrice,
-    lotSize: trades.lotSize,
-    ratio: trades.ratio,
-    takeProfit: trades.takeProfit,
-    stopLoss: trades.stopLoss,
-    profitInCents: trades.profitInCents
-  }).from(trades);
+export async function getTradeById(tradeId: string) {
+  try {
+    const trade = await db.select().from(trades)
+      .where(eq(trades.id, tradeId));
+    return trade[FIRST_RESULT];
+  } catch(error) {
+    throw new Error("Failed to get trade");
+  }
 }
 
 
@@ -173,7 +159,7 @@ export async function deleteTradingPlan({ tradingPlanId }: { tradingPlanId: stri
 }
 
 
-export async function updateUpdatedTradingPlans(
+export async function updateEdittedTradingPlans(
   { tp, editted, newStrats }:
   {
     tp: {
@@ -219,5 +205,56 @@ export async function updateUpdatedTradingPlans(
     await db.insert(strategies).values(
       newStrats.map(strategy => ({ tradingPlansId: tp.tradingPlanId, strategy }))
     );
+  }
+}
+
+export async function getFilteredTrades(
+  query: string,
+  currentPage: number
+) {
+
+  try {
+    return await db.select().from(trades)
+      .where(
+        or(
+          ilike(sql`${trades.ticket}::TEXT`, `%${query}%`),
+          ilike(sql`${trades.entryTime}::TEXT`, `%${query}%`),
+          ilike(sql`${trades.type}::TEXT`, `%${query}%`),
+          ilike(sql`${trades.exitTime}::TEXT`, `%${query}%`),
+          ilike(sql`${trades.profitInCents}::TEXT`, `%${query}%`),
+          ilike(sql`${trades.entryPrice}::TEXT`, `%${query}%`),
+          ilike(sql`${trades.exitPrice}::TEXT`, `%${query}%`),
+          ilike(sql`${trades.ratio}::TEXT`, `%${query}%`),
+        )
+      )
+      .orderBy(desc(trades.entryTime))
+      .limit(ITEMS_PER_PAGE)
+      .offset((currentPage - 1) * ITEMS_PER_PAGE);
+
+  } catch (error) {
+    console.log(error);
+    throw new Error('Failed to fetch filtered trades');
+  }
+}
+
+export async function getTradesPages(query: string) {
+  try {
+    const c = await db.select({ count: count() }).from(trades).where( 
+      or(
+        ilike(sql`${trades.ticket}::TEXT`, `%${query}%`),
+        ilike(sql`${trades.entryTime}::TEXT`, `%${query}%`),
+        ilike(sql`${trades.type}::TEXT`, `%${query}%`),
+        ilike(sql`${trades.exitTime}::TEXT`, `%${query}%`),
+        ilike(sql`${trades.profitInCents}::TEXT`, `%${query}%`),
+        ilike(sql`${trades.entryPrice}::TEXT`, `%${query}%`),
+        ilike(sql`${trades.exitPrice}::TEXT`, `%${query}%`),
+        ilike(sql`${trades.ratio}::TEXT`, `%${query}%`),
+      )
+    );
+
+    return Math.ceil( c[FIRST_RESULT].count / ITEMS_PER_PAGE);
+  } catch(error) {
+    console.error("Database Error:", error);
+    throw new Error('Failed to fetch trade\'s pages')
   }
 }

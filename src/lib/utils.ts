@@ -17,6 +17,18 @@ export function isObjEmpty(obj: Object) {
   return false;
 }
 
+// https://stackoverflow.com/questions/65678337/how-to-group-array-of-dates-by-month-and-year
+
+/* "When grouping things in general, its much easier to group them into an
+ * object. Reason, is you don't have to search an array for a matching result
+ * to append to, you only have to look up for a key to concatenate to." */
+
+/* The accumulator will have the values that have accumulated over time .
+ * First, create a key, if not exists, which will be used as a unique 
+ * identifier when we group.
+ * For each date, concatenate it to the unique key constructed, if the key
+ * it constructs exists, it is reused */
+
 export function toGroupedStrategies(
   args:
   {
@@ -76,4 +88,42 @@ export function toGroupedTradingPlanStrategiesWithId(props:
     return accumulator;
   }, {}));
 
+}
+
+
+export function generatePagination(currentPage: number, totalPages: number) {
+  /* If the number of pages is 7 or less, display all pages with any ellipsis */
+  if (totalPages <=7 ) {
+    return Array.from({ length: totalPages }, (_, i) => i+ 1);
+  }
+
+  /* If the current page is among the first 3 pages, show the first 3, an
+   * ellipsis and the last 2 pages. */
+  if (currentPage <= 3) {
+    return [1, 2, 3, '...', totalPages - 1, totalPages];
+  }
+
+  /* If the current page is among the last three pages, show the first 2 pages,
+   * an ellipsis and the last 3 pages. */
+  if (currentPage >= totalPages - 2) {
+    return [1, 2, '...', totalPages - 2, totalPages - 1, totalPages];
+  }
+
+  /* If the current page is somewhere in the middle, show the first page, an 
+   * ellipsis, the current page and its neighbours another ellipsis and 
+   * the last page */
+  return [
+    1,
+    '...',
+    currentPage - 1,
+    currentPage, 
+    currentPage + 1,
+    '...',
+    totalPages
+  ];
+}
+
+
+export function truncateZeros(num: number) {
+  const regex = /0+$/;
 }
