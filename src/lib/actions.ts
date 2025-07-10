@@ -8,7 +8,7 @@ import {
   isAllowedUser, getUserRole, isUserAdmin, updateUserRole, newTradingPlan, 
   updateTradeStrategiesForTrade, 
   deleteTradingPlan,
-  updateUpdatedTradingPlans
+  updateEdittedTradingPlans
 } from "@/db/queries";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
@@ -301,7 +301,7 @@ export async function updateEdittedTradingPlanAction(tradingPlanId: string, form
   try {
     const { tradingPlan, edittedStrategies, newStrategies } = validatedValues.data;
 
-    await updateUpdatedTradingPlans({ 
+    await updateEdittedTradingPlans({ 
       tp: {
         tradingPlanId, tradingPlan
       },

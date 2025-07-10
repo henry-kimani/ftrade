@@ -1,44 +1,50 @@
-import { toSentenceCase } from "@/lib/utils";
-import { Diameter, HandCoins, LogIn, LogOut, OctagonXIcon, Scale, TrendingUp } from "lucide-react";
+import { getTradeById } from "@/db/queries";
+import { cn, toSentenceCase } from "@/lib/utils";
+import { Diameter, HandCoins, LogIn, LogOut, OctagonXIcon, Scale, TrendingUp, TrendingDown } from "lucide-react";
 
 
-export default function MetricsTable() {
+export default async function MetricsTable({ tradeId }: { tradeId: string }) {
+  const trade = await getTradeById(tradeId);
 
   const data = [
     {
-      icon: TrendingUp,
-      metric: "profit",
-      value: 20,
+      icon: trade.profitInCents < 0 ? TrendingDown : TrendingUp,
+      metric: trade.profitInCents < 0 ? "loss" : "profit",
+      value: "$ "+(trade.profitInCents / 100).toPrecision(),
+      className: trade.profitInCents < 0 ? "text-red-400" : "text-green-400"
     },
     {
       icon: LogIn,
       metric: "entry price",
-      value: 20,
+      value: Number(trade.entryPrice).toPrecision(),
     },
     {
       icon: LogOut,
       metric: "exit price",
-      value: 20,
+      value: Number(trade.exitPrice).toPrecision(),
     },
     {
       icon: HandCoins,
       metric: "take profit",
-      value: 30,
+      value: Number(trade.takeProfit).toPrecision(),
+      className: "text-green-400"
     },
     {
       icon: OctagonXIcon,
       metric: "stop loss",
-      value: 40,
+      value: Number(trade.stopLoss).toPrecision(),
+      className: "text-red-400"
     },
     {
       icon: Scale,
       metric: "ratio",
-      value: 20,
+      value: Number(trade.stopLoss).toFixed(1),
+      className: "text-blue-400"
     },
     {
       icon: Diameter,
       metric: "lot size",
-      value: 20,
+      value: trade.lotSize,
     }
   ];
 
@@ -54,7 +60,7 @@ export default function MetricsTable() {
         {data.map(item => (
           <tr key={item.metric} className="">
             <td className="pl-4 pr-3 py-4 flex gap-4">
-              <item.icon className="rounded-full" />
+              <item.icon className={cn(item.className)} />
               {toSentenceCase(item.metric)}
             </td>
             <td className="px-3 py-4">{item.value}</td>
