@@ -11,7 +11,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Label } from "../ui/label";
 import { Checkbox } from "../ui/checkbox";
 import { CheckedState } from "@radix-ui/react-checkbox";
-import { UpdateTradeStrategies, type SelectedStrategies } from "@/lib/definitions";
+import { type GroupedStrategies, UpdateTradeStrategies, type SelectedStrategies } from "@/lib/definitions";
 import { updateTradeStrategiesAction } from "@/lib/actions";
 
 
@@ -22,7 +22,7 @@ export default function AddStrategyForm(
     allTradingStrategies
   }:{
     tradeId: string; // the trade to update
-    defaultTradeStrategies:  SelectedStrategies; // the default selected trades
+    defaultTradeStrategies:  GroupedStrategies; // the default selected trades
     allTradingStrategies: Record<string,{ strategies: string[] }>// All the trades to choose from
   }
 ) {

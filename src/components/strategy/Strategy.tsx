@@ -4,23 +4,22 @@ import { ChevronDown, Pencil } from "lucide-react";
 import { DialogTitle, Dialog, DialogContent, DialogDescription, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
 import AddStrategyForm from "./AddStrategyForm";
 import { getStrategiesWithTradingPlans } from "@/db/queries";
-import { toSentenceCase } from "@/lib/utils";
+import { toSentenceCase, toGroupedStrategies } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Label } from "@/components/ui/label";
 import { getAllTradingPlansAndTheirStrategies } from "@/db/queries";
-import { SelectedStrategies } from "@/lib/definitions";
 
 export default async function Strategy({ tradeId }: { tradeId: string }) {
   const tradeStrategies = await getStrategiesWithTradingPlans(tradeId);
 
-  const groupedTradeStrategies = Object.groupBy(tradeStrategies, ({ tradingPlan }) => tradingPlan);
+  const groupedTradeStrategies = toGroupedStrategies(tradeStrategies);
   const keys = Object.keys(groupedTradeStrategies);
 
   return (
     <Card>
       <CardHeader className="flex justify-between">
         <div>
-          <CardTitle>Trading Plans</CardTitle>
+          <CardTitle className="text-lg">Trading Plans</CardTitle>
           <CardDescription>
             Trading plans and their strategies.
           </CardDescription>
@@ -44,8 +43,8 @@ export default async function Strategy({ tradeId }: { tradeId: string }) {
                 content={
                   <ol className="pl-4">
                     <Label className="border-b text-sm text-muted-foreground pl-1 pb-2 font-bold">{key.toUpperCase()}</Label>
-                    {groupedTradeStrategies[key]?.map((strategy, index) => (
-                      <li key={index} className="pl-2 mt-3 list-disc">{toSentenceCase(strategy.strategy|| "")}</li>
+                    {groupedTradeStrategies[key]?.strategies.map((strategy, index) => (
+                      <li key={index} className="pl-2 mt-3 list-disc">{toSentenceCase(strategy|| "")}</li>
                     ))}
                   </ol>
                 } 
@@ -73,25 +72,6 @@ async function CreateStrategyDialog(
   // Don't bother fetching data if the current use is not an admin
   const allTradingPlanStrategies = await getAllTradingPlansAndTheirStrategies();
 
-  function toSelectedStrategiesType(
-    args:
-    {
-      strategy: string | null;
-      tradingPlan: string;
-    }[]
-  ) {
-    const data: SelectedStrategies = {};
-    const grouped = Object.groupBy(args, ({ tradingPlan }) => tradingPlan);
-    Object.keys(grouped).forEach(key => {
-      if (grouped[key]) {
-        data[key] = {
-          strategies: grouped[key].map(({ strategy }) => strategy ? strategy : "")
-        }
-      }
-    });
-    return data;
-  }
-
   return(
     <Dialog>
       <DialogTrigger asChild>
@@ -109,9 +89,9 @@ async function CreateStrategyDialog(
         <AddStrategyForm 
           tradeId={tradeId} // Trade to modify
           // The default selected tradeStrategies
-          defaultTradeStrategies={toSelectedStrategiesType(defaultTradeStrategies)}
+          defaultTradeStrategies={toGroupedStrategies(defaultTradeStrategies)}
           // All strategies to choose from
-          allTradingStrategies={toSelectedStrategiesType(allTradingPlanStrategies)}
+          allTradingStrategies={toGroupedStrategies(allTradingPlanStrategies)}
         />
       </DialogContent>
     </Dialog>
