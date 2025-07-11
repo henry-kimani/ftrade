@@ -57,6 +57,13 @@
       "when": 1751082516072,
       "tag": "20250628034836_modify-policy-for-perf",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1752264642291,
+      "tag": "20250711201042_added_avatar_url_col",
+      "breakpoints": true
     }
   ]
 }

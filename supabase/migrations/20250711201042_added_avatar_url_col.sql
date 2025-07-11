@@ -1,0 +1,1 @@
+ALTER TABLE "allowed_users" ADD COLUMN "avatar_url" text;

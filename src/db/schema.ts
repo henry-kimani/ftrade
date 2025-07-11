@@ -22,7 +22,8 @@ export const allowedUsers = pgTable('allowed_users', {
     .notNull()
     .primaryKey(),
   email: varchar({ length: 50 }).unique().notNull(),
-  role: roles().notNull().default("none")
+  role: roles().notNull().default("none"),
+  avatarUrl: text(),
   }, (table) => [
     pgPolicy('Only an auth admin can add make changes', {
       to: authenticatedRole,
