@@ -5,7 +5,7 @@ import MetricsTable from "./tables/MetricsTable";
 export default function Metrics({ tradeId }: { tradeId: string }) {
   return (
     <Card className="">
-      <CardContent>
+      <CardContent className="overflow-x-scroll">
         <Suspense fallback="Loading Metrics...">
           <MetricsTable tradeId={tradeId} />
         </Suspense>

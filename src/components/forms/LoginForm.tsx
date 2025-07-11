@@ -14,7 +14,7 @@ export default function LoginForm() {
   const [state, formAction] = useActionState(login, initialState);
 
   return (
-    <Card className="bg-transparent border-none shadow-none">
+    <Card className="!bg-transparent border-none shadow-none">
       <CardHeader className="grid place-items-center">
         <CardTitle className="text-2xl">Login</CardTitle>
         <CardDescription>Log in to your account</CardDescription>

@@ -21,13 +21,12 @@ export default async function Trades(props: {
   const totalPages = await getTradesPages(searchTerm);
 
   return (
-    <>
+    <div>
       <div className="top-0 fixed w-full z-10 bg-background">
         <SiteHeader heading="trades" />
       </div>
-      <main className="m-auto p-4 mt-12">
-
-        <div className="mb-8 w-full">
+      <main className="max-w-4xl mx-auto p-4 mt-12 ">
+        <div className="mb-8">
           <SearchTrade />
         </div>
 
@@ -39,7 +38,7 @@ export default async function Trades(props: {
           <Pagination totalPages={totalPages} />
         </div>
       </main>
-    </>
+    </div>
   );
 }
 

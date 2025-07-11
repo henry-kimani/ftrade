@@ -33,13 +33,13 @@ export default async function MetricsTable({ tradeId }: { tradeId: string }) {
     {
       icon: ClockArrowUp,
       metric: "entry time",
-      value: format(trade.entryTime, "dd/MM/YYY"),
+      value: format(trade.entryTime, "dd/MM/YYY p"),
       className: "text-fuchsia-400",
     },
     {
       icon: ClockArrowDown,
       metric: "exit time",
-      value: format(trade.exitTime, "dd/MM/YYY"),
+      value: format(trade.exitTime, "dd/MM/YYY p"),
       className: "text-fuchsia-400",
     },
     {
@@ -71,18 +71,18 @@ export default async function MetricsTable({ tradeId }: { tradeId: string }) {
     <table className="table min-w-full">
       <thead className="border-b text-left *:font-bold *:text-sm *:text-muted-foreground">
         <tr>
-          <td className="py-4 px-3">METRIC</td>
-          <td className="py-4 px-3">VALUE</td>
+          <td className="py-4 @md/main:px-3">METRIC</td>
+          <td className="py-4 @md/main:px-3">VALUE</td>
         </tr>
       </thead>
       <tbody className="divide-y border-b">
         {data.map(item => (
           <tr key={item.metric} className="">
-            <td className="pl-4 pr-3 py-4 flex gap-4">
+            <td className="@md/main:pl-4 pr-3 py-4 flex gap-4">
               <item.icon className={cn(item.className)} />
               {toSentenceCase(item.metric)}
             </td>
-            <td className="px-3 py-4 truncate">{item.value}</td>
+            <td className="py-4">{item.value}</td>
           </tr>
         ))}
       </tbody>

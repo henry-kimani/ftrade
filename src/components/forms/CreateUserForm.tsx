@@ -22,7 +22,7 @@ export default function CreateUserForm() {
         </SelectTrigger>
         <SelectContent>
           {roles.enumValues.map(role => (
-            <SelectItem value={role}>{role}</SelectItem>
+            <SelectItem key={role} value={role}>{role}</SelectItem>
           ))}
         </SelectContent>
       </Select>
