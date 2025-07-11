@@ -1,12 +1,19 @@
 import { getTradeById } from "@/db/queries";
 import { cn, toSentenceCase } from "@/lib/utils";
-import { Diameter, HandCoins, LogIn, LogOut, OctagonXIcon, Scale, TrendingUp, TrendingDown } from "lucide-react";
+import { format } from "date-fns";
+import { Diameter, HandCoins, LogIn, LogOut, OctagonXIcon, Scale, TrendingUp, TrendingDown, BanknoteArrowUp, BanknoteArrowDown, ClockArrowUp, ClockArrowDown } from "lucide-react";
 
 
 export default async function MetricsTable({ tradeId }: { tradeId: string }) {
   const trade = await getTradeById(tradeId);
 
   const data = [
+    {
+      icon: trade.type === "BUY" ? BanknoteArrowUp : BanknoteArrowDown,
+      metric: "trade type",
+      value: trade.type,
+      className: "text-amber-500"
+    },
     {
       icon: trade.profitInCents < 0 ? TrendingDown : TrendingUp,
       metric: trade.profitInCents < 0 ? "loss" : "profit",
@@ -22,6 +29,18 @@ export default async function MetricsTable({ tradeId }: { tradeId: string }) {
       icon: LogOut,
       metric: "exit price",
       value: Number(trade.exitPrice).toPrecision(),
+    },
+    {
+      icon: ClockArrowUp,
+      metric: "entry time",
+      value: format(trade.entryTime, "dd/MM/YYY"),
+      className: "text-fuchsia-400",
+    },
+    {
+      icon: ClockArrowDown,
+      metric: "exit time",
+      value: format(trade.exitTime, "dd/MM/YYY"),
+      className: "text-fuchsia-400",
     },
     {
       icon: HandCoins,
@@ -63,7 +82,7 @@ export default async function MetricsTable({ tradeId }: { tradeId: string }) {
               <item.icon className={cn(item.className)} />
               {toSentenceCase(item.metric)}
             </td>
-            <td className="px-3 py-4">{item.value}</td>
+            <td className="px-3 py-4 truncate">{item.value}</td>
           </tr>
         ))}
       </tbody>
