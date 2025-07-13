@@ -64,6 +64,13 @@
       "when": 1752264642291,
       "tag": "20250711201042_added_avatar_url_col",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1752344299641,
+      "tag": "20250712181819_modified_policies-added_avatars_tbl",
+      "breakpoints": true
     }
   ]
 }
