@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import {  useEffect, useState, useRef } from "react";
 import ReactQuillNew, { DeltaStatic } from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { Save } from "lucide-react";
 import { updateNoteAction } from "@/lib/actions";
 const ReactQuill = dynamic(() => import('react-quill-new'), { ssr: false });
@@ -29,16 +29,10 @@ export default function Editor (
   }
 ) {
 
-  const [ deltaValue, setDeltaValue ] = useState<DeltaStatic | undefined>();
+  const [ deltaValue, setDeltaValue ] = useState<DeltaStatic | undefined>(JSON.parse(note));
+  const [ isChanged, setIsChanged ] = useState(false);
 
   const quillRef = useRef<ReactQuillNew>(null);
-
-  useEffect(() => {
-    if (quillRef.current && note) {
-      quillRef.current.setEditorContents(quillRef.current.getEditor(), JSON.parse(note));
-    }
-  }, [note]);
-
 
   const formats = [ 'list', 'align', 'indent', 'link', 'bold', 'header', 'italic', 'strike', 'background', 'underline' ];
 
@@ -53,6 +47,8 @@ export default function Editor (
 
   function handleEditorChange(editor: ReactQuillNew.UnprivilegedEditor) {
     setDeltaValue(editor.getContents());
+
+    if (JSON.stringify(editor.getContents()) !== note) setIsChanged(true);
   }
 
   return (
@@ -73,20 +69,31 @@ export default function Editor (
           toolbar: toolbarOptions
         }}
         theme="snow"
+        value={deltaValue}
         readOnly={false}
         onChange={(c, d, s, editor) => handleEditorChange(editor)}
       />
-      <SaveNote delta={deltaValue} noteId={noteId} tradeId={tradeId} />
+      {isChanged &&
+        <SaveNote 
+          delta={deltaValue} 
+          noteId={noteId} 
+          tradeId={tradeId} 
+          isChanged={(isChange: boolean) => {
+            setIsChanged(isChange);
+          }} 
+        />
+      }
     </div>
   );
 }
 
 function SaveNote(
-  { delta, noteId, tradeId }:
+  { delta, noteId, tradeId, isChanged }:
   {
     noteId: string, 
     tradeId: string,
-    delta: DeltaStatic | undefined 
+    delta: DeltaStatic | undefined,
+    isChanged: (isChange: boolean) => void
   }
 ) {
 
@@ -96,11 +103,14 @@ function SaveNote(
     formData.append('note', JSON.stringify(delta));
     const errors = await updateNoteAction(noteId, tradeId, formData);
     setState(errors);
+    isChanged(false);
   }
 
   return (
     <form action={onSubmit}>
-      <Button>
+      <Button
+        type="submit"
+      >
         Save
         <Save />
       </Button>

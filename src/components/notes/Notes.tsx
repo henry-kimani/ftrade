@@ -7,6 +7,7 @@ import Editor from "@/components/notes/Editor";
 import CreateNoteForm from "@/components/forms/CreateNoteForm";
 import { getNote } from "@/db/queries";
 import { format } from "date-fns";
+import { AlarmClockCheck, AlarmClockPlus } from "lucide-react";
 
 export default async function Notes({ tradeId }: { tradeId: string }) {
 
@@ -17,9 +18,19 @@ export default async function Notes({ tradeId }: { tradeId: string }) {
       <CardHeader>
         <CardTitle className="text-lg">Notes</CardTitle>
         {noteData &&
-          <CardDescription className="grid">
-            {noteData.createdAt && <div>Created At: {format(noteData.createdAt, "PP")}</div>}
-            {noteData.updatedAt && <div>Last Updated: {format(noteData.updatedAt, "PP")}</div>}
+          <CardDescription className="grid gap-2 @md/main:grid-flow-col @md/main:gap-0">
+            {noteData.createdAt && 
+              <div className="dark:text-yellow-200 flex gap-2">
+                <span><AlarmClockPlus /></span>
+                <span>{format(noteData.createdAt, "PPpp")}</span>
+              </div>
+            }
+            {noteData.updatedAt &&
+              <div className="dark:text-green-200 flex gap-2">
+                <span><AlarmClockCheck /></span>
+                <span>{format(noteData.updatedAt, "PPpp")}</span>
+              </div>
+            }
           </CardDescription>
         }
       </CardHeader>
