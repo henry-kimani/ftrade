@@ -1,4 +1,4 @@
-import { allowedUsers, notes, Role, strategies, trades, tradeStrategies, tradingPlans } from "@/db/schema";
+import { allowedUsers, avatarUrls, notes, Role, strategies, trades, tradeStrategies, tradingPlans } from "@/db/schema";
 import { db } from "@/db/dbConn";
 import { desc, and, eq, ilike, like, notInArray, or, sql, count } from "drizzle-orm";
 
@@ -297,4 +297,29 @@ export async function saveNote(noteId: string, note: string, tradeId: string) {
       eq(notes.tradesId, tradeId)
     )
   );
+}
+
+
+export async function getUserAvatarURl(userId: string) {
+  try {
+    const avatarUrl = await db.select({
+      avatarUrl: avatarUrls.avatarUrl
+    }).from(avatarUrls).where(eq(avatarUrls.userId, userId));
+
+    return avatarUrl[FIRST_RESULT];
+  } catch (error){
+    throw new Error("Could not get avatar url.");
+  }
+}
+
+
+export async function updateAvatarURL(url: string, userId:string) {
+  try {
+    await db.update(avatarUrls).set({
+      avatarUrl: url
+    }).where(eq(avatarUrls.userId, userId));
+  } catch(error) {
+    console.log(error);
+    throw new Error("Could not update avatar url");
+  }
 }

@@ -1,12 +1,17 @@
 import {
   boolean, real, varchar,
   integer, numeric, pgEnum, pgPolicy, pgTable, smallint, text, timestamp, uuid,
-  check, 
+  check,
+  pgView,
+  QueryBuilder, 
 } from "drizzle-orm/pg-core";
 import { authenticatedRole, authUid, authUsers } from "drizzle-orm/supabase";
-import { sql, InferEnum } from "drizzle-orm";
+import { sql, InferEnum, gte } from "drizzle-orm";
 import { timestamps } from "@/db/helpers";
+import { eq } from "drizzle-orm";
 
+
+const qb = new QueryBuilder();
 
 
 export const roles = pgEnum('role', ['none', 'viewer', 'admin']);
@@ -23,15 +28,33 @@ export const allowedUsers = pgTable('allowed_users', {
     .primaryKey(),
   email: varchar({ length: 50 }).unique().notNull(),
   role: roles().notNull().default("none"),
-  avatarUrl: text(),
   }, (table) => [
     pgPolicy('Only an auth admin can add make changes', {
       to: authenticatedRole,
       for: "all",
-      using: sql`(SELECT ${table.role} FROM allowed_users WHERE ${table.id} = ${authUid}) >= 'viewer'`,
+      using: sql`(${table.role} >= 'viewer')`,
       /* For INSERT, UPDATE and DELETE commands, only allow the to run if the 
        * current user is and admin */
-      withCheck: sql`(SELECT ${table.role} FROM allowed_users WHERE ${table.id} = ${authUid}) = 'admin'`,
+      withCheck: sql`(${table.role} = 'admin')`,
+    })
+  ]
+);
+
+export const checkRoleView = pgView("check_role_view")
+.as(
+  qb.select({ role: allowedUsers.role }).from(allowedUsers).where(eq(allowedUsers.id, authUid))
+);
+
+export const avatarUrls = pgTable("avatar_urls", {
+  id: uuid().primaryKey().notNull().defaultRandom(),
+  userId: uuid().references(() => allowedUsers.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
+  avatarUrl: text(),
+}, () => [
+    pgPolicy('Anyone can view a profile', {
+      to: authenticatedRole,
+      for: "all",
+      using: sql`(SELECT role FROM check_role_view) >= 'viewer'`,
+      withCheck: sql`(SELECT role FROM check_role_view) >= 'viewer'`
     })
   ]
 );

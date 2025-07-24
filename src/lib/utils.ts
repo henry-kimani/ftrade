@@ -124,6 +124,19 @@ export function generatePagination(currentPage: number, totalPages: number) {
 }
 
 
-export function truncateZeros(num: number) {
-  const regex = /0+$/;
+export function genPathName(
+  type: "avatar" | "ref" | "shot", 
+  id: string, 
+  file: File
+){
+  const fileExt = file.name.split(".").pop();
+  if (type === "avatar") {
+    return `${id}.${fileExt}`;
+  } else if (type === "ref") {
+    return `ref-${Math.random()}.${fileExt}`;
+  } else {
+    return `${id}/${Math.random()}.${fileExt}`;
+  }
 }
+
+

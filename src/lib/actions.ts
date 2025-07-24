@@ -1,6 +1,7 @@
 'use server';
 
 import {
+    AvatarImageSchema,
   CreateUserSchema, EdittedTradingPlansSchema, LoginSchema, NewTradingPlansSchema, State, 
   UpdatedNoteSchema, 
   UpdateTradeStrategiesSchema, UpdateUserRoleSchema 
@@ -11,13 +12,15 @@ import {
   deleteTradingPlan,
   updateEdittedTradingPlans,
   createNote,
-  saveNote
+  saveNote,
+  updateAvatarURL
 } from "@/db/queries";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { verifyAction } from "./dal";
 import { UpdateTradeStrategies } from "./definitions";
+import { genPathName } from "./utils";
 
 
 
@@ -375,4 +378,93 @@ export async function updateNoteAction(
   } catch {
     return { message: "An error occured." };
   }
+}
+
+
+export async function uploadAvatarAction(prevState: State, formData: FormData) {
+  const user = await verifyAction();
+
+  if ("message" in user) {
+    return {
+      message: user.message
+    };
+  }
+
+  const validatedValues = AvatarImageSchema.safeParse({
+    avatar: formData.get('avatar')
+  });
+
+  if (!validatedValues.success) {
+    return {
+      errors: validatedValues.error.flatten().fieldErrors,
+      message: "Check your values"
+    }
+  }
+
+  const { avatar } = validatedValues.data;
+
+  if (!avatar) {
+    return { message: "No file to upload" }
+  }
+
+  const supabase = await createClient();
+
+  const filePath = genPathName("avatar", user.id, avatar);
+
+  /* Upsert is set to true, to replace the photo if it exists */ 
+  const { error } = await supabase.storage.from('avatars').upload(filePath, avatar, { upsert: true });
+
+  if (error) {
+    console.log(error);
+    return { message: "Encountered an error while uploading." };
+  }
+
+  /* Save the url in the users table */
+  try {
+    await updateAvatarURL(filePath, user.id);
+  } catch(error) {
+    console.log(error);
+    return { message: "Encountered an error." }
+  }
+
+  revalidatePath("/settings");
+}
+
+
+export async function deleteUserAction(id:string, prevState: State) {
+  const user = await verifyAction();
+
+  if ("message" in user) {
+    return {
+      message: user.message
+    }
+  }
+
+  const isAdmin = await isUserAdmin(user.id);
+
+  if (!isAdmin) {
+    return {
+      message: "You are not an admin"
+    }
+  }
+
+  /* Check the user isn't trying to delete themselves */
+  if (user.id === id) {
+    return {
+      message: "You can't delete yourself"
+    }
+  }
+
+  const supabase = await createClient();
+
+  const { error } = await supabase.auth.admin.deleteUser(id);
+
+  if (error) {
+    console.log(error);
+    return {
+      message: "Encountered an error while deleting."
+    }
+  }
+
+  revalidatePath("/settings");
 }

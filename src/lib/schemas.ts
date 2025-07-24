@@ -1,6 +1,8 @@
 import { z } from "zod";
 import { roles } from "@/db/schema";
 
+const AVATAR_FILE_SIZE_LIMIT = 5 * 1024 * 1024;
+
 export type State = {
   errors?: {
     email?:  string; 
@@ -58,4 +60,19 @@ export const EdittedTradingPlansSchema = z.object({
 
 export const UpdatedNoteSchema = z.object({
   note: z.string({ invalid_type_error: "Should include only characters." })
+});
+
+export const AvatarImageSchema = z.object({
+  avatar: z
+  .instanceof(File)
+  .transform((file) => {
+    /* Returning undefined if the file does not comply, allows us not throw an
+     * error, plus the user profile will not be changed */
+    if (['image/png', 'image/jpg', 'image/jpeg', 'image/webp'].includes(file.type)) {
+      return file
+    } else return undefined;
+  })
+  .refine(file => file && file.size < AVATAR_FILE_SIZE_LIMIT, {
+    message: "File should be less than 5MB"
+  })
 });
