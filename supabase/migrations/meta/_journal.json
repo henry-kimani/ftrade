@@ -78,6 +78,13 @@
       "when": 1752424907172,
       "tag": "20250713164147_modified_handle_new_user_fun",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1752428435667,
+      "tag": "20250713174035_modified_avatarurls_constraints",
+      "breakpoints": true
     }
   ]
 }
