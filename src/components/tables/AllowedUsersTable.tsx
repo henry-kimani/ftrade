@@ -32,7 +32,7 @@ export default async function AllowedUsersTable() {
                   <EllipsisVertical />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuGroup>
+                  <DropdownMenuGroup className="min-w-40">
                     <DropdownMenuLabel>Update Role</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <UpdateRoleForm defaultValue={role} userId={userId}/>
