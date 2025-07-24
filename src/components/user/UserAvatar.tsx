@@ -15,7 +15,7 @@ export default function UserAvatar(
   return (
     <div>
       {imgUrl !== null && imgUrl !== undefined ? 
-        <img
+        <Image
           src={imgUrl} 
           alt="Avatar" 
           width={200}

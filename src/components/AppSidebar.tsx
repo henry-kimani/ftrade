@@ -1,14 +1,14 @@
-import React, { Suspense } from "react";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupLabel, SidebarGroupContent,
   SidebarMenu, SidebarMenuButton,
   SidebarHeader,
   SidebarFooter
 } from "@/components/ui/sidebar";
-import { AlignHorizontalDistributeCenter, AppWindow, AppWindowIcon, CircleDollarSign, Goal, Settings } from "lucide-react";
+import { AlignHorizontalDistributeCenter, AppWindowIcon, CircleDollarSign, Goal, Settings } from "lucide-react";
 import { SidebarMenuItem } from "./ui/sidebar";
 import Link from "next/link";
-import UserProfile from "./UserProfile";
+import UserEmailProfile from "@/components/user/UserSidebarEmail";
+import { Suspense } from "react";
 
 const items = [
   {
@@ -78,8 +78,8 @@ export default function AppSidebar() {
             </SidebarMenuButton>
           </SidebarMenuItem>
           <SidebarMenuItem>
-            <Suspense fallback="Loading...">
-              <UserProfile />
+            <Suspense fallback="Loading profile ...">
+            <UserEmailProfile />
             </Suspense>
           </SidebarMenuItem>
         </SidebarMenu>
