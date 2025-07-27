@@ -16,8 +16,7 @@
 }
 .emblaControls {
   display: grid;
-  grid-template-columns: auto 1fr;
-  justify-items: self-end;
+  grid-template-columns: repeat(3, auto);
   margin-top: 1rem;
 }
 .emblaDotButton {
