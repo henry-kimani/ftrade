@@ -325,6 +325,20 @@ export async function updateAvatarURL(url: string, userId:string) {
 }
 
 
+export async function getScreenshotUrls(tradeId: string) {
+  try {
+    return await db.select({
+      screenshotId: screenshotsUrls.id,
+      screenshotUrl: screenshotsUrls.screenshotUrl
+    }).from(screenshotsUrls).where(eq(screenshotsUrls.tradesId, tradeId))
+  }
+  catch(error) {
+    console.log(error);
+    throw new Error("Could not get screenshots");
+  }
+}
+
+
 export async function uploadScreenshotsUrls(tradeId: string, url: string) {
   try {
     await db.insert(screenshotsUrls).values({
@@ -334,5 +348,15 @@ export async function uploadScreenshotsUrls(tradeId: string, url: string) {
   } catch (error) {
     console.log(error)
     throw new Error("Failed to upload url to db")
+  }
+}
+
+
+export async function deleteScreenshot(screenshotId: string) {
+  try {
+  await db.delete(screenshotsUrls).where(eq(screenshotsUrls.id, screenshotId));
+  } catch (error) {
+    console.log();
+    throw new Error("Could not delete screenshot");
   }
 }

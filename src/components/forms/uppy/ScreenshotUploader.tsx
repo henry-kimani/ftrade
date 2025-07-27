@@ -15,7 +15,6 @@ export default function ScreenshotUploader({ tradeId}: { tradeId: string }) {
 
   const ref = useRef<HTMLDivElement>(null);
   const uploadRef = useRef<HTMLButtonElement>(null);
-  console.log("Trade Id: ", tradeId);
 
   useEffect(() => {
     if(ref && uploadRef) {
@@ -41,6 +40,7 @@ export default function ScreenshotUploader({ tradeId}: { tradeId: string }) {
     <section>
       <div>
         <Button
+          title="Upload photo"
           size="icon"
           variant="outline"
           ref={uploadRef}

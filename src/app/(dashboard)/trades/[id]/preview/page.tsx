@@ -6,12 +6,31 @@ import React, { Suspense } from "react";
 import SiteHeader from "@/components/SiteHeader";
 import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbSeparator, BreadcrumbPage } from "@/components/ui/breadcrumb";
 import Link from "next/link";
+import { getScreenshotUrls } from "@/db/queries";
+import { createClient } from "@/lib/supabase/server";
 
 export default async function PreviewTrade(props: {
   params: Promise<{ id: string }>
 }) {
 
   const { id: tradeId } = await props.params;
+
+  const screenshots = await getScreenshotUrls(tradeId);
+  const supabase = await createClient();
+
+  const publicScreenshots = screenshots.map(({ screenshotId, screenshotUrl }) => {
+    if (!screenshotUrl) return;
+
+    const { data } = supabase.storage.from('screenshots').getPublicUrl(screenshotUrl);
+
+    if (!data) return;
+
+    return {
+      screenshotId,
+      screenshotPublicUrl: data.publicUrl,
+      screenshotPath: screenshotUrl
+    }
+  });
 
   return (
     <div>
@@ -37,7 +56,7 @@ export default async function PreviewTrade(props: {
         </div>
 
         <div className="grid place-items-center mb-8">
-          <ScreenshotCarousel tradeId={tradeId} />
+          <ScreenshotCarousel screenshots={publicScreenshots} tradeId={tradeId} />
         </div>
 
         <div className="grid mb-4">

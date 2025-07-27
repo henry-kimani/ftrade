@@ -13,12 +13,13 @@ import {
   updateEdittedTradingPlans,
   createNote,
   saveNote,
-  updateAvatarURL
+  updateAvatarURL,
+  deleteScreenshot
 } from "@/db/queries";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { verifyAction } from "./dal";
+import { verifyAction, verifyUser } from "./dal";
 import { UpdateTradeStrategies } from "./definitions";
 import { genPathName } from "./utils";
 
@@ -437,6 +438,7 @@ export async function uploadAvatarAction(prevState: State, formData: FormData) {
     return { message: "Encountered an error." }
   }
 
+  revalidatePath("/(dashboard)", 'layout');
   revalidatePath("/settings");
 }
 
@@ -477,4 +479,34 @@ export async function deleteUserAction(id:string, prevState: State) {
   }
 
   revalidatePath("/settings");
+}
+
+
+
+export async function deleteScreenshotAction(screenshotId: string, screenshotPath: string) {
+  const { user } = await verifyUser();
+  const isAdmin = await isUserAdmin(user.id);
+
+  if (!isAdmin){
+    return;
+  }
+
+  if (!screenshotId) {
+    return;
+  }
+
+  try {
+    const supabase = await createClient();
+    const { error } = await supabase.storage.from('screenshots').remove([screenshotPath]);
+
+    if (error) {
+      return;
+    }
+
+    await deleteScreenshot(screenshotId);
+  } catch {
+    return;
+  }
+
+  revalidatePath("/trades");
 }

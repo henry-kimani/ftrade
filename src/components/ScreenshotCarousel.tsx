@@ -8,10 +8,20 @@ import { Button } from "@/components/ui/button";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
 import ScreenshotUploader from "@/components/forms/uppy/ScreenshotUploader";
+import DeleteScreenshot from "./forms/DeleteScreenshot";
 
-const ITEMS = 5;
+export default function ScreenshotCarousel(
+  { tradeId, screenshots }:
+  {
+    tradeId: string,
+    screenshots: ({
+      screenshotId: string;
+      screenshotPublicUrl: string;
+      screenshotPath: string;
+    }| undefined)[]
+  }
+) {
 
-export default function ScreenshotCarousel({ tradeId }: { tradeId: string }) {
   const [ emblaRef, emblaApi ] = useEmblaCarousel({ loop: true });
   const [ selectedIndex, setSelectedIndex ] = useState(0);
 
@@ -39,9 +49,14 @@ export default function ScreenshotCarousel({ tradeId }: { tradeId: string }) {
       {/* Viewport */}
       <div className={styles.emblaViewport} ref={emblaRef}>
         <div className={styles.emblaContainer}>
-          {Array.from({ length: ITEMS }).map((_,index) => (
-            <div key={index} className={styles.emblaSlide}>
-              <Image src="/sampleforex.jpg" alt="sample screenshot" width={1000} height={500} />  
+          {screenshots.map((shot, index) => (
+            shot && <div key={index} className={styles.emblaSlide}>
+              <Image 
+                src={shot?.screenshotPublicUrl} 
+                alt="sample screenshot" width={500} height={100} 
+                className="w-full"
+              />
+              <DeleteScreenshot screenshotId={shot.screenshotId} screenshotPath={shot.screenshotPath} />
             </div>
           ))}
         </div>
@@ -49,19 +64,19 @@ export default function ScreenshotCarousel({ tradeId }: { tradeId: string }) {
 
       {/* Controls */}
       <div className={styles.emblaControls}>
-        <div className="justify-self-start flex gap-2">
+        { screenshots[0]?.screenshotId && <div className="justify-self-start flex gap-2">
           <Button onClick={scrollPrev} variant="outline" size="icon" className="rounded-full">
             <ChevronLeft />
           </Button>       
           <Button onClick={scrollNext} variant="outline" size="icon" className="rounded-full">
             <ChevronRight />
           </Button>
-        </div>
+        </div>}
         <div className="justify-self-center">
           <ScreenshotUploader tradeId={tradeId} />
         </div>
         <div className="justify-self-end items-center flex">
-          {Array.from({ length: ITEMS }).map((_,index) => (
+          {Array.from({ length: screenshots.length }).map((_,index) => (
             <button
               key={index}
               onClick={() => onDotButtonClick(index)} 

@@ -3,6 +3,7 @@ import { verifyUser } from "@/lib/dal";
 import { ScreenshotImageSchema } from "@/lib/schemas";
 import { createClient } from "@/lib/supabase/server";
 import { genPathName } from "@/lib/utils";
+import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 
@@ -56,6 +57,7 @@ export async function POST(request: NextRequest) {
     }
   })
 
-  return NextResponse.json({});
+  revalidatePath("/trades");
+  return NextResponse.json({ revalidated: true });
 }
 

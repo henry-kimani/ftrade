@@ -10,9 +10,14 @@
   touch-action: pan-y pinch-zoom;
 }
 .emblaSlide {
-  flex: 0 0 80%; 
+  flex: 0 0 60%; 
   margin-left: 5px;
   margin-right: 5px;
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: .5em;
 }
 .emblaControls {
   display: grid;
