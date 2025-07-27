@@ -1,4 +1,4 @@
-import { allowedUsers, avatarUrls, notes, Role, strategies, trades, tradeStrategies, tradingPlans } from "@/db/schema";
+import { allowedUsers, avatarUrls, notes, Role, screenshotsUrls, strategies, trades, tradeStrategies, tradingPlans } from "@/db/schema";
 import { db } from "@/db/dbConn";
 import { desc, and, eq, ilike, like, notInArray, or, sql, count } from "drizzle-orm";
 
@@ -321,5 +321,18 @@ export async function updateAvatarURL(url: string, userId:string) {
   } catch(error) {
     console.log(error);
     throw new Error("Could not update avatar url");
+  }
+}
+
+
+export async function uploadScreenshotsUrls(tradeId: string, url: string) {
+  try {
+    await db.insert(screenshotsUrls).values({
+      tradesId: tradeId,
+      screenshotUrl: url
+    });
+  } catch (error) {
+    console.log(error)
+    throw new Error("Failed to upload url to db")
   }
 }

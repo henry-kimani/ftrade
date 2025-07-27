@@ -37,7 +37,7 @@ export default async function PreviewTrade(props: {
         </div>
 
         <div className="grid place-items-center mb-8">
-          <ScreenshotCarousel />
+          <ScreenshotCarousel tradeId={tradeId} />
         </div>
 
         <div className="grid mb-4">

@@ -2,6 +2,7 @@ import { z } from "zod";
 import { roles } from "@/db/schema";
 
 const AVATAR_FILE_SIZE_LIMIT = 5 * 1024 * 1024;
+const ALLOWED_MIME_TYPES = ['image/png', 'image/jpg', 'image/jpeg', 'image/webp'];
 
 export type State = {
   errors?: {
@@ -68,11 +69,27 @@ export const AvatarImageSchema = z.object({
   .transform((file) => {
     /* Returning undefined if the file does not comply, allows us not throw an
      * error, plus the user profile will not be changed */
-    if (['image/png', 'image/jpg', 'image/jpeg', 'image/webp'].includes(file.type)) {
+    if (ALLOWED_MIME_TYPES.includes(file.type)) {
       return file
     } else return undefined;
   })
   .refine(file => file && file.size < AVATAR_FILE_SIZE_LIMIT, {
     message: "File should be less than 5MB"
   })
+});
+
+export const ScreenshotImageSchema = z.object({
+  screenshots: z.array(
+    z.instanceof(File)
+      .transform(file => {
+        if (ALLOWED_MIME_TYPES.includes(file.type)) {
+          return file;
+        } else return undefined;
+
+      })
+      .refine(file => file && file.size < AVATAR_FILE_SIZE_LIMIT, {
+        message: "Each file should be less than 5MB"
+      })
+  ),
+  tradeId: z.string().uuid()
 });

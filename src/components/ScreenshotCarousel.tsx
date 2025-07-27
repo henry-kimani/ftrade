@@ -7,10 +7,11 @@ import styles from "@/styles/ScreenshotCarousel.module.css";
 import { Button } from "@/components/ui/button";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
+import ScreenshotUploader from "@/components/forms/uppy/ScreenshotUploader";
 
 const ITEMS = 5;
 
-export default function ScreenshotCarousel() {
+export default function ScreenshotCarousel({ tradeId }: { tradeId: string }) {
   const [ emblaRef, emblaApi ] = useEmblaCarousel({ loop: true });
   const [ selectedIndex, setSelectedIndex ] = useState(0);
 
@@ -48,7 +49,7 @@ export default function ScreenshotCarousel() {
 
       {/* Controls */}
       <div className={styles.emblaControls}>
-        <div className="grid gap-2 grid-cols-2">
+        <div className="justify-self-start flex gap-2">
           <Button onClick={scrollPrev} variant="outline" size="icon" className="rounded-full">
             <ChevronLeft />
           </Button>       
@@ -56,7 +57,10 @@ export default function ScreenshotCarousel() {
             <ChevronRight />
           </Button>
         </div>
-        <div className="flex">
+        <div className="justify-self-center">
+          <ScreenshotUploader tradeId={tradeId} />
+        </div>
+        <div className="justify-self-end items-center flex">
           {Array.from({ length: ITEMS }).map((_,index) => (
             <button
               key={index}
