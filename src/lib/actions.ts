@@ -59,6 +59,16 @@ export async function login(prevState: State, formData: FormData) {
 }
 
 
+export async function logoutAction() {
+  const supabase = await createClient();
+
+  const { error } = await supabase.auth.signOut({ scope: "local" });
+  
+  if (error) {
+    return;
+  }
+}
+
 
 export async function createUser(prevState: State, formData: FormData) {
   const supabase = await createClient();
