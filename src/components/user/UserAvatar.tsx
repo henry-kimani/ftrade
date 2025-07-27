@@ -4,22 +4,30 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 
 export default function UserAvatar(
-  { imgUrl, className, fallbackLetter }:
+  { 
+    imgUrl, 
+    className, 
+    fallbackLetter,
+    width=200,
+    height=200
+  }:
   {
     imgUrl: string | undefined;
     className?: string;
     fallbackLetter: string;
+    width: number;
+    height: number
   }
 ) {
 
   return (
-    <div>
-      {imgUrl !== null && imgUrl !== undefined ? 
+    <div className="grid">
+      {imgUrl ? 
         <Image
           src={imgUrl} 
           alt="Avatar" 
-          width={200}
-          height={200}
+          width={width}
+          height={height}
           className={cn("rounded-full", className)}
         /> :
         <div className={cn("flex items-center justify-center text-2xl !bg-muted rounded-full", className)}>

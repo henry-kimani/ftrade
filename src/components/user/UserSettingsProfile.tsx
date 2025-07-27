@@ -12,10 +12,6 @@ export default async function UserSettingsProfile() {
 
   const publicUrl = await getAvatarUrlFromStorage(avatarUrl);
 
-  if (!publicUrl) {
-    return;
-  }
-
   return (
     <div>
       <Card className="max-w-lg mx-auto border-none !bg-transparent">
