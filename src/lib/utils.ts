@@ -133,7 +133,7 @@ export function genPathName(
   if (type === "avatar") {
     return `${id}.${fileExt}`;
   } else if (type === "ref") {
-    return `ref-${Math.random()}.${fileExt}`;
+    return `ref-image.${fileExt}`;
   } else {
     return `${id}/${Math.random()}.${fileExt}`;
   }

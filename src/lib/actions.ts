@@ -577,3 +577,31 @@ export async function insertPhaseToTradeAction(tradeId: string, formData: FormDa
   }
 }
 
+
+
+export async function uploadRefImageAction(formData: FormData) {
+  const { user } = await verifyUser();
+  const isAdmin = await isUserAdmin(user.id);
+
+  if (!isAdmin) return;
+
+  /* A reference image and an avatar share the same validation schema */
+  const validatedValues = AvatarImageSchema.safeParse({
+    avatar: formData.get('reference-image')
+  });
+
+  if (!validatedValues.success) return;
+
+  const supabase = await createClient();
+  const { avatar: refImage } = validatedValues.data;
+
+  if (!refImage) return;
+
+  const filePath = genPathName("ref", "", refImage);
+
+  await supabase.storage.from('references').upload(filePath, refImage, { upsert: true})
+
+  revalidatePath("/settings");
+  redirect("/settings");
+}
+
