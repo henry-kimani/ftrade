@@ -1,3 +1,4 @@
+import AddPhases from "@/components/AddPhases";
 import SiteHeader from "@/components/SiteHeader";
 import AllowedUsers from "@/components/tables/AllowedUsers";
 import TradingPlans from "@/components/tradingplan/TradingPlans";
@@ -19,6 +20,11 @@ export default async function SettingsPage() {
         </div>
         <div>
           <AllowedUsers />
+        </div>
+        <div>
+          <Suspense fallback="Loading phases ...">
+            <AddPhases />
+          </Suspense>
         </div>
         <div>
           <TradingPlans />
