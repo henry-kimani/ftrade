@@ -1,4 +1,4 @@
-import { allowedUsers, avatarUrls, notes, Role, screenshotsUrls, strategies, trades, tradeStrategies, tradingPlans } from "@/db/schema";
+import { allowedUsers, avatarUrls, notes, phases, Role, screenshotsUrls, strategies, trades, tradeStrategies, tradingPlans } from "@/db/schema";
 import { db } from "@/db/dbConn";
 import { desc, and, eq, ilike, like, notInArray, or, sql, count } from "drizzle-orm";
 
@@ -358,5 +358,51 @@ export async function deleteScreenshot(screenshotId: string) {
   } catch (error) {
     console.log();
     throw new Error("Could not delete screenshot");
+  }
+}
+
+
+export async function getPhases() {
+  try {
+    return await db.select().from(phases);
+  } catch {
+    throw new Error("Could not get phases");
+  }
+}
+
+
+export async function insertPhases(addedPhases: { phase: string, phaseColor: string }[]) {
+  try {
+    await db.insert(phases).values(addedPhases);
+  } catch {
+    throw new Error("Could not insert phases");
+  }
+}
+
+
+export async function getPhase(tradeId: string) {
+  try {
+    const phase = await db.select({
+      id: phases.id,
+      phase: phases.phase,
+      phaseColor: phases.phaseColor
+    }).from(phases)
+      .innerJoin(trades, eq(phases.id, trades.phasesId))
+      .where(eq(trades.id, tradeId));
+
+    return phase[FIRST_RESULT];
+  } catch {
+    throw new Error("Could not get default phase.");
+  }
+}
+
+
+export async function insertPhaseToTrade(tradeId: string, phaseId: string) {
+  try {
+    await db.update(trades).set({
+      phasesId: phaseId
+    }).where(eq(trades.id, tradeId));
+  } catch {
+    throw new Error("Could not insert phase");
   }
 }

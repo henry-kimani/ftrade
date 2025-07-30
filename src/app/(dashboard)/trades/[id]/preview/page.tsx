@@ -8,6 +8,7 @@ import { Breadcrumb, BreadcrumbList, BreadcrumbItem, BreadcrumbSeparator, Breadc
 import Link from "next/link";
 import { getScreenshotUrls } from "@/db/queries";
 import { createClient } from "@/lib/supabase/server";
+import Phases from "@/components/phases/Phases";
 
 export default async function PreviewTrade(props: {
   params: Promise<{ id: string }>
@@ -57,6 +58,12 @@ export default async function PreviewTrade(props: {
 
         <div className="grid place-items-center mb-8">
           <ScreenshotCarousel screenshots={publicScreenshots} tradeId={tradeId} />
+        </div>
+
+        <div className="mb-4">
+          <Suspense fallback="Loading Phases ...">
+            <Phases tradeId={tradeId} />
+          </Suspense>
         </div>
 
         <div className="grid mb-4">

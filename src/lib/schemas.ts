@@ -93,3 +93,16 @@ export const ScreenshotImageSchema = z.object({
   ),
   tradeId: z.string().uuid()
 });
+
+export const PhasesSchema = z.object({
+  addedPhases: z.array(
+    z.object({
+      phase: z.string().min(3).max(10),
+      phaseColor: z.string().regex(/^#[a-f0-9]{6}$/, { message: "Should be a hex color value" })
+    })
+  ).min(1, { message: "At least one phase is required."})
+});
+
+export const PhaseSchema = z.object({
+  selectedPhaseId: z.string().uuid()
+});
