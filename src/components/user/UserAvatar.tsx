@@ -8,8 +8,8 @@ export default function UserAvatar(
     imgUrl, 
     className, 
     fallbackLetter,
-    width=200,
-    height=200
+    width=50,
+    height=50
   }:
   {
     imgUrl: string | undefined;
@@ -21,7 +21,7 @@ export default function UserAvatar(
 ) {
 
   return (
-    <div className="grid">
+    <div>
       {imgUrl ? 
         <Image
           src={imgUrl} 

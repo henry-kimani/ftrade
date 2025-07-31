@@ -14,13 +14,13 @@ export default async function UserSettingsProfile() {
 
   return (
     <div>
-      <Card className="max-w-lg mx-auto border-none !bg-transparent">
+      <Card className="min-w-xs max-w-2xl mx-auto border-none !bg-transparent">
         <CardContent className="grid gap-4">
           <div className="flex items-center gap-5">
-            <UserAvatar imgUrl={publicUrl} className="!size-20" fallbackLetter={user.email?.charAt(0).toUpperCase() || "U"}/>
+            <UserAvatar imgUrl={publicUrl} className="size-20" fallbackLetter={user.email?.charAt(0).toUpperCase() || "U"}/>
 
             <div className="grid gap-2">
-              <span className="text-lg font-semibold text-ellipsis">
+              <span className="text-md md:text-lg font-semibold text-ellipsis">
                 {user.email}
               </span>
               <span><AvatarForm /></span>
