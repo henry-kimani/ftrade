@@ -445,45 +445,6 @@ export async function uploadAvatarAction(prevState: State, formData: FormData) {
 }
 
 
-export async function deleteUserAction(id:string, prevState: State) {
-  const user = await verifyAction();
-
-  if ("message" in user) {
-    return {
-      message: user.message
-    }
-  }
-
-  const isAdmin = await isUserAdmin(user.id);
-
-  if (!isAdmin) {
-    return {
-      message: "You are not an admin"
-    }
-  }
-
-  /* Check the user isn't trying to delete themselves */
-  if (user.id === id) {
-    return {
-      message: "You can't delete yourself"
-    }
-  }
-
-  const supabase = await createClient();
-
-  const { error } = await supabase.auth.admin.deleteUser(id);
-
-  if (error) {
-    console.log(error);
-    return {
-      message: "Encountered an error while deleting."
-    }
-  }
-
-  revalidatePath("/settings");
-}
-
-
 
 export async function deleteScreenshotAction(screenshotId: string, screenshotPath: string) {
   const { user } = await verifyUser();
