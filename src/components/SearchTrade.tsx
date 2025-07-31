@@ -31,6 +31,7 @@ export default function TradesCalendar() {
         onChange={(e) => handleSearchTrade(e.target.value)}
         placeholder="Search Trade..." 
         className="pl-10"
+        type="search"
       />
       <Search className="absolute left-5 h-[18px] w-[18px] top-1/2 -translate-1/2 text-muted-foreground"/>
     </div>

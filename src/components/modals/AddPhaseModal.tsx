@@ -7,7 +7,7 @@ export default function AddPhasesModal({ children }: { children: React.ReactNode
     <div>
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant={"secondary"}><Plus /></Button>
+          <Button size="icon" variant={"secondary"}><Plus /></Button>
         </DialogTrigger>
         <DialogContent>
           <DialogHeader>

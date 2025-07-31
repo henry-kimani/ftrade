@@ -25,7 +25,7 @@ export default async function AddPhases() {
               Manage phases, their color and the reference image.
             </CardDescription>
           </div>
-          <div>
+          <div className="flex gap-2">
             <RefImageForm />
             <AddPhasesModal>
               <AddPhasesForm />
@@ -33,13 +33,13 @@ export default async function AddPhases() {
           </div>
         </CardHeader>
         <CardContent>
-          <div>
+          <div className="grid place-items-center">
             {data.publicUrl && 
               <Image
                 src={data.publicUrl}
                 alt="Reference Image"
-                width={200}
-                height={100}
+                width={300}
+                height={200}
               />}
           </div>
           {phases && phases.map(({ id, phase, phaseColor }) => (
