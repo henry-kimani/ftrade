@@ -1,7 +1,7 @@
 'use client';
 
 import { Button } from "@/components/ui/button";
-import { createNoteAction } from "@/lib/actions";
+import { createNoteAction } from "@/lib/actions/note";
 import { State } from "@/lib/schemas";
 import { Plus } from "lucide-react";
 import { useActionState } from "react";

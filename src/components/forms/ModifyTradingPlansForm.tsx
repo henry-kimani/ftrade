@@ -3,7 +3,7 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useActionState, useEffect, useState } from "react";
-import { deleteTradingPlanAction, updateEdittedTradingPlanAction } from "@/lib/actions";
+import { deleteTradingPlanAction, updateEdittedTradingPlanAction } from "@/lib/actions/tradeStrategies";
 import { Plus, Trash2 } from "lucide-react";
 
 type StrategyType = {

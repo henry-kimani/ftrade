@@ -7,14 +7,14 @@ import { PlusIcon, Trash2 } from "lucide-react";
 import { FormEvent } from "react";
 import { Label } from "@/components/ui/label";
 import { State } from "@/lib/schemas";
-import { newTradingPlansAction } from "@/lib/actions";
+import { newTradingPlanAction } from "@/lib/actions/tradeStrategies";
 
 export default function AddNewTradingPlan() {
 
   const [ strategies, setStrategies ] = useState<string [] | undefined>();
   const [ currentStrategy, setCurrentStrategy ] = useState<string | undefined>("");
   const initialState: State = { errors: {}, message: null };
-  const [ state, formAction ] = useActionState(newTradingPlansAction, initialState);
+  const [ state, formAction ] = useActionState(newTradingPlanAction, initialState);
 
   function handleCurrentStrategyChange(event: FormEvent<HTMLInputElement>) {
     setCurrentStrategy(event.currentTarget.value);

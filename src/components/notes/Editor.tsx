@@ -2,12 +2,12 @@
 
 import { cn } from "@/lib/utils";
 import dynamic from "next/dynamic";
-import {  useEffect, useState, useRef } from "react";
+import {  useState, useRef } from "react";
 import ReactQuillNew, { DeltaStatic } from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 import { Button } from "@/components/ui/button";
 import { Save } from "lucide-react";
-import { updateNoteAction } from "@/lib/actions";
+import { updateNoteAction } from "@/lib/actions/note";
 const ReactQuill = dynamic(() => import('react-quill-new'), { ssr: false });
 
 type SaveNoteState = {

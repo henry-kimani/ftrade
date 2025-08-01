@@ -11,8 +11,8 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Label } from "../ui/label";
 import { Checkbox } from "../ui/checkbox";
 import { CheckedState } from "@radix-ui/react-checkbox";
-import { type GroupedStrategies, UpdateTradeStrategies, type SelectedStrategies } from "@/lib/definitions";
-import { updateTradeStrategiesAction } from "@/lib/actions";
+import { type GroupedStrategies, UpdateTradeStrategies } from "@/lib/definitions";
+import { updateStrategiesForTradeAction } from "@/lib/actions/tradeStrategies";
 
 
 export default function AddStrategyForm(
@@ -28,7 +28,7 @@ export default function AddStrategyForm(
 ) {
 
   const [ tradingPlan, setTradingPlan ] = useState<string | null>();
-  const [ selectedStrategies, setSelectedStrategies ] = useState<SelectedStrategies>();
+  const [ selectedStrategies, setSelectedStrategies ] = useState<GroupedStrategies>();
 
   useEffect(() => {
     // Call once when the component mounts to prevent errors when reopening the dialog
@@ -90,7 +90,7 @@ export default function AddStrategyForm(
       newStrategies,
     }
     formData.append("trade-strategies", JSON.stringify(data));
-    await updateTradeStrategiesAction(formData);
+    await updateStrategiesForTradeAction(formData);
   }
 
   return (

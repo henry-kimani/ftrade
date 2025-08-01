@@ -2,7 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { uploadAvatarAction } from "@/lib/actions";
+import { uploadAvatarAction } from "@/lib/actions/avatar";
 import { ImageUpIcon } from "lucide-react";
 import { ChangeEvent, useActionState, useRef } from "react";
 

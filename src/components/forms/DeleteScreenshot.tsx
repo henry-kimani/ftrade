@@ -1,4 +1,4 @@
-import { deleteScreenshotAction } from "@/lib/actions";
+import { deleteScreenshotAction } from "@/lib/actions/screenshots";
 import { Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 

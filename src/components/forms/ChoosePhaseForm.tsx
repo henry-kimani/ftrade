@@ -1,10 +1,9 @@
 'use client';
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { insertPhaseToTradeAction } from "@/lib/actions";
-import { State } from "@/lib/schemas";
+import { insertPhaseToTradeAction } from "@/lib/actions/phase";
 import { toSentenceCase } from "@/lib/utils";
-import { useActionState, useRef, useState } from "react";
+import { useRef } from "react";
 
 type PhaseType = {
   id: string;

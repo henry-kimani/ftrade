@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Plus, Trash2 } from "lucide-react";
 import { useActionState, useState } from "react";
-import { insertPhaseAction } from "@/lib/actions";
+import { insertPhaseAction } from "@/lib/actions/phase";
 import { State } from "@/lib/schemas";
 
 export default function AddPhasesForm() {

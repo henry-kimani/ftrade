@@ -5,13 +5,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { login } from "@/lib/actions";
+import { loginAction } from "@/lib/actions/auth";
 import { State } from "@/lib/schemas";
 
 export default function LoginForm() {
 
   const initialState: State = { errors: {}, message: null };
-  const [state, formAction] = useActionState(login, initialState);
+  const [state, formAction] = useActionState(loginAction, initialState);
 
   return (
     <Card className="!bg-transparent border-none shadow-none">

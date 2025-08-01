@@ -6,7 +6,7 @@ import { Select, SelectTrigger, SelectItem, SelectValue, SelectContent } from "@
 import { roles } from "@/db/schema";
 import { Button } from "@/components/ui/button";
 import { State } from "@/lib/schemas";
-import { createUser } from "@/lib/actions";
+import { createUser } from "@/lib/actions/auth";
 
 export default function CreateUserForm() {
   const initialState: State = { errors: {}, message: null };

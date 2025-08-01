@@ -59,6 +59,10 @@ export const EdittedTradingPlansSchema = z.object({
   ).nullish()
 });
 
+export const CreateNoteSchema = z.object({
+  tradeId: z.string({ message: "A trade id is required." }).uuid()
+});
+
 export const UpdatedNoteSchema = z.object({
   note: z.string({ invalid_type_error: "Should include only characters." })
 });

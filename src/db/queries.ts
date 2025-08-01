@@ -111,7 +111,7 @@ export async function getTradingPlanAndStrategiesWithIds(tradingPlanId: string) 
 }
 
 
-export async function updateTradeStrategiesForTrade(
+export async function updateStrategiesForTrade(
   { tradeId, newStrategies }:
   {
     tradeId: string;
@@ -159,7 +159,7 @@ export async function deleteTradingPlan({ tradingPlanId }: { tradingPlanId: stri
 }
 
 
-export async function updateEdittedTradingPlans(
+export async function updateEdittedTradingPlan(
   { tp, editted, newStrats }:
   {
     tp: {

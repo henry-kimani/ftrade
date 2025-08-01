@@ -1,7 +1,7 @@
 'use client';
 
 import { Input } from "@/components/ui/input";
-import { uploadRefImageAction } from "@/lib/actions";
+import { uploadRefImageAction } from "@/lib/actions/ref-image";
 import { ImageUpIcon } from "lucide-react";
 import { useRef } from "react";
 import { Label } from "@/components/ui/label";

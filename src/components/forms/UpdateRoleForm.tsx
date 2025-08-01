@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Role, roles } from "@/db/schema";
 import { useActionState } from "react";
 import { State } from "@/lib/schemas";
-import { updateUserRoleAction } from "@/lib/actions";
+import { updateUserRoleAction } from "@/lib/actions/role";
 import { Button } from "@/components/ui/button";
 
 export default function UpdateRoleForm(
