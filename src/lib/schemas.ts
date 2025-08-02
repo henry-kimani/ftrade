@@ -29,10 +29,11 @@ export const UpdateUserRoleSchema = CreateUserSchema.omit({
 });
 
 export const UpdateTradeStrategiesSchema = z.object({
-  tradeStrategies: z.string({ 
-    invalid_type_error: "Only characters are allowed.",
-    message: "Invalid trade strategies"
-  })
+  tradeStrategies: z.array(
+    z.string({ 
+      invalid_type_error: "Only characters are allowed.",
+    }).min(3, { message: "A strategy should have at least 3 characters" })
+  ).min(1, { message: "At least one strategy is required" }),
 });
 
 export const NewTradingPlansSchema = z.object({

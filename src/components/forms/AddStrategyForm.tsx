@@ -6,13 +6,14 @@ import {
 } from "@/components/ui/select";
 import { toSentenceCase, isObjEmpty } from "@/lib/utils";
 import { Button } from "../ui/button";
-import { useEffect, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Label } from "../ui/label";
 import { Checkbox } from "../ui/checkbox";
 import { CheckedState } from "@radix-ui/react-checkbox";
-import { type GroupedStrategies, UpdateTradeStrategies } from "@/lib/definitions";
+import { type GroupedStrategies } from "@/lib/definitions";
 import { updateStrategiesForTradeAction } from "@/lib/actions/tradeStrategies";
+import { State } from "@/lib/schemas";
 
 /* Here in the formdata we are sending the tradeId and the new strategies. We 
  * could have just sent the tradeId and newStrategies' ids, however, the former
@@ -33,6 +34,8 @@ export default function AddStrategyForm(
   }
 ) {
 
+  const initialState: State = { errors: {}, message: null };
+  const [state, formAction] = useActionState(onSubmit, initialState);
   const [ tradingPlan, setTradingPlan ] = useState<string | null>();
   const [ selectedStrategies, setSelectedStrategies ] = useState<GroupedStrategies>();
 
@@ -88,15 +91,14 @@ export default function AddStrategyForm(
     }
   }
 
-  async function formAction(formData: FormData) {
-    const newStrategies = Object.values(selectedStrategies)
+  async function onSubmit() {
+    const formData = new FormData();
+
+    Object.values(selectedStrategies)
     .flatMap(selectedStrategy => selectedStrategy.strategies)
-    const data: UpdateTradeStrategies = {
-      tradeId,
-      newStrategies,
-    }
-    formData.append("trade-strategies", JSON.stringify(data));
-    await updateStrategiesForTradeAction(formData);
+    .map(strategy => formData.append("trade-strategies", strategy));
+
+    return await updateStrategiesForTradeAction(tradeId, formData);
   }
 
   return (
@@ -177,11 +179,17 @@ export default function AddStrategyForm(
               }
             </PopoverContent>
           </Popover>
+          {state?.errors?.tradeStrategies && state.errors.tradeStrategies.map(error => <p key={error} className="text-red-400 my-2">{error}</p>)}
         </div>
         <div>
           <Button type="submit" className="w-full">Done</Button>
         </div>
       </form>
+      {state?.message && 
+        state.message.startsWith("Success") ?
+        <p className="text-green-400">{state.message}</p>:
+        <p className="text-red-400">{state.message}</p>
+      }
     </div>
   );
 }

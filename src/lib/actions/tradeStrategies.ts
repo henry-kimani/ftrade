@@ -11,14 +11,14 @@ import { UpdateTradeStrategies } from "@/lib/definitions";
 
 
 /* Update the strategies for a specific trade */
-export async function updateStrategiesForTradeAction(formData: FormData) {
+export async function updateStrategiesForTradeAction(tradeId:string, formData: FormData) {
 
   const { user } = await verifyUser();
   const isAdmin = await isUserAdmin(user.id);
   if (!isAdmin) return { message: "You are not an admin" };
 
   const validatedValues = UpdateTradeStrategiesSchema.safeParse({
-    tradeStrategies: formData.get('trade-strategies'),
+    tradeStrategies: formData.getAll('trade-strategies'),
   });
 
   if (!validatedValues.success) {
@@ -28,16 +28,14 @@ export async function updateStrategiesForTradeAction(formData: FormData) {
     }
   }
 
-  const { tradeId, newStrategies }: UpdateTradeStrategies = JSON.parse(validatedValues.data.tradeStrategies);
-
   try {
-    await updateStrategiesForTrade({ tradeId, newStrategies });
+    await updateStrategiesForTrade({ tradeId, newStrategies: validatedValues.data.tradeStrategies });
   } catch(error) {
     return { message: "Database Error" };
   }
 
   revalidatePath("/trades");
-  return { message: "Success!" }
+  return { message: "Success!" } 
 }
 
 
