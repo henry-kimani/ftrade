@@ -14,6 +14,12 @@ import { CheckedState } from "@radix-ui/react-checkbox";
 import { type GroupedStrategies, UpdateTradeStrategies } from "@/lib/definitions";
 import { updateStrategiesForTradeAction } from "@/lib/actions/tradeStrategies";
 
+/* Here in the formdata we are sending the tradeId and the new strategies. We 
+ * could have just sent the tradeId and newStrategies' ids, however, the former
+ * is more secure. 
+ * While inserting in the database, we get the id associated to that newStrategy
+ * if the id doesn't exists, we don't insert (throw an error). However, this
+ * is works since strategies are also unique. */
 
 export default function AddStrategyForm(
   { 
@@ -65,20 +71,20 @@ export default function AddStrategyForm(
       return;
     };
 
-    const clonedSelectedStrategies = { ...selectedStrategies };
+    const clone = { ...selectedStrategies };
 
     if (checked) {
       // Add
-      clonedSelectedStrategies[tradingPlan].strategies.push(selectedStrategy);
-      setSelectedStrategies(clonedSelectedStrategies);
+      clone[tradingPlan].strategies.push(selectedStrategy);
+      setSelectedStrategies(clone);
     } else {
-      clonedSelectedStrategies[tradingPlan].strategies = 
-        clonedSelectedStrategies[tradingPlan].strategies.filter(strategy => strategy !== selectedStrategy)
+      clone[tradingPlan].strategies = 
+        clone[tradingPlan].strategies.filter(strategy => strategy !== selectedStrategy)
       // Check if that tradingplan's strategies are zero, then remove it
-      if (clonedSelectedStrategies[tradingPlan].strategies.length === 0) {
-        delete clonedSelectedStrategies[tradingPlan];
+      if (clone[tradingPlan].strategies.length === 0) {
+        delete clone[tradingPlan];
       }
-      setSelectedStrategies(clonedSelectedStrategies);
+      setSelectedStrategies(clone);
     }
   }
 

@@ -76,7 +76,7 @@ export async function getTradeById(tradeId: string) {
 
 
 /* Get the strategies and their trading plans for a trade */
-export async function getStrategiesWithTradingPlans(tradeId: string){
+export async function getPlansAndStrategiesForTrade(tradeId: string){
   return db.select({
     strategy: strategies.strategy,
     tradingPlan: tradingPlans.tradingPlan,
