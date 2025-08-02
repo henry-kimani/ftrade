@@ -39,7 +39,7 @@ export default function Editor (
   const toolbarOptions = [
     [ { 'header': [ false, 1, 2, 3, 4, ] } ],
     [ 'bold', 'italic', 'underline', 'strike', 'link' ],
-    [ { 'background': [ '', '#444' ] } ],
+    [ { 'background': [ '', '#491717', '#721F2C', '#CC5A78', '#FFA9A6', '#EED0BC' ] } ],
     [ {'indent': '+1'}, { 'indent': '-1' },],
     [ { 'align': [ '', 'center', 'right', 'justify' ] }],
     [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'list': 'check' }]
