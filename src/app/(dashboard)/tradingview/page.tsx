@@ -1,6 +1,9 @@
 import TradingView from "@/components/TradingView";
+import { checkUserRoleIsNone } from "@/lib/dal";
 
-export default function TradingViewPage() {
+export default async function TradingViewPage() {
+  await checkUserRoleIsNone();
+
   const databaseIndicators = [
     "STD;Aroon",
     "STD;Awesome_Oscillator"

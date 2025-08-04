@@ -2,10 +2,11 @@ import React from "react";
 import SectionCards from "@/components/SectionCards";
 import OverallRevenueChart from "@/components/charts/OverallRevenueChart";
 import SiteHeader from "@/components/SiteHeader";
-import { verifyUser } from "@/lib/dal";
+import { verifyUser, checkUserRoleIsNone } from "@/lib/dal";
 
 export default async function Dashboard() {
-  // await verifyUser();
+  await checkUserRoleIsNone();
+  await verifyUser();
 
   return (
     <>

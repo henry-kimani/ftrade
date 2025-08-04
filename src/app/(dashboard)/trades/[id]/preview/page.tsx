@@ -9,12 +9,16 @@ import Link from "next/link";
 import { getScreenshotUrls } from "@/db/queries";
 import { createClient } from "@/lib/supabase/server";
 import Phases from "@/components/phases/Phases";
+import { checkUserRoleIsNone, isCurrentUserAdmin } from "@/lib/dal";
 
 export default async function PreviewTrade(props: {
   params: Promise<{ id: string }>
 }) {
 
+  await checkUserRoleIsNone();
+
   const { id: tradeId } = await props.params;
+  const isAdmin = await isCurrentUserAdmin();
 
   const screenshots = await getScreenshotUrls(tradeId);
   const supabase = await createClient();
@@ -57,7 +61,7 @@ export default async function PreviewTrade(props: {
         </div>
 
         <div className="grid place-items-center mb-8">
-          <ScreenshotCarousel screenshots={publicScreenshots} tradeId={tradeId} />
+          <ScreenshotCarousel isAdmin={isAdmin} screenshots={publicScreenshots} tradeId={tradeId} />
         </div>
 
         <div className="mb-4">

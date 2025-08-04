@@ -25,12 +25,12 @@ export async function isAllowedUser(key: Search) {
 
 
 /* Get the role of the current user */
-export async function getUserRole(userId: string) {
+export async function isUserNoneRole(userId: string) {
   const userRole = await db.select({
     role: allowedUsers.role
   }).from(allowedUsers).where(eq(allowedUsers.id, userId))
 
-  if (userRole) return userRole[FIRST_RESULT].role;
+  return userRole[FIRST_RESULT].role === "none";
 }
 
 

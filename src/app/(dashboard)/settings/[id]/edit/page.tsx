@@ -2,12 +2,17 @@ import ModifyTradingPlansForm from "@/components/forms/ModifyTradingPlansForm";
 import SiteHeader from "@/components/SiteHeader";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbPage, BreadcrumbList, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import { getTradingPlanAndStrategiesWithIds } from "@/db/queries";
+import { isCurrentUserAdmin } from "@/lib/dal";
 import { toGroupedStrategiesWithIds } from "@/lib/utils";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default async function EditTradingPlan(
   props: { params: Promise<{ id: string }>}
 ) {
+  const isAdmin = await isCurrentUserAdmin();
+  if (!isAdmin) redirect("/settings");
+
   const { id: tradingPlanId } = await props.params;
 
   // Data to prefill the form

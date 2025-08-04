@@ -4,8 +4,12 @@ import { Button } from "../ui/button";
 import { Plus } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import ModifyTradingStrategies from "@/components/tradingplan/ModifyTradingStrategies";
+import AddNewTradingPlanModal from "../modals/AddNewTradingPlanModal";
+import { isCurrentUserAdmin } from "@/lib/dal";
 
 export default async function TradingPlans() {
+
+  const isAdmin = await isCurrentUserAdmin();
 
   return (
     <div>
@@ -19,7 +23,11 @@ export default async function TradingPlans() {
               </CardDescription>
             </div>
             <div>
-              <CreateDialog />
+              {isAdmin &&
+                <AddNewTradingPlanModal>
+                  <AddNewTradingPlan />
+                </AddNewTradingPlanModal>
+              }
             </div>
           </CardHeader>
           <CardContent className="grid gap-4">
@@ -28,28 +36,5 @@ export default async function TradingPlans() {
         </Card>
       </div>
     </div>
-  );
-}
-
-async function CreateDialog() {
-
-  return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button className="w-full" variant="secondary">
-          New
-          <Plus />
-        </Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Add New Trading Plan</DialogTitle>
-          <DialogDescription>
-            Add a new tradingplan and their strategies.
-          </DialogDescription>
-        </DialogHeader>
-        <AddNewTradingPlan />
-      </DialogContent>
-    </Dialog>
   );
 }

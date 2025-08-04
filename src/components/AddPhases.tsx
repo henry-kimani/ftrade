@@ -6,8 +6,11 @@ import { toSentenceCase } from "@/lib/utils";
 import RefImageForm from "@/components/forms/RefImageForm";
 import { createClient } from "@/lib/supabase/server";
 import Image from "next/image";
+import { isCurrentUserAdmin } from "@/lib/dal";
 
 export default async function AddPhases() {
+
+  const isAdmin = await isCurrentUserAdmin();
 
   const phases = await getPhases();
 
@@ -25,12 +28,12 @@ export default async function AddPhases() {
               Manage phases, their color and the reference image.
             </CardDescription>
           </div>
-          <div className="flex gap-2">
+          { isAdmin && <div className="flex gap-2">
             <RefImageForm />
             <AddPhasesModal>
               <AddPhasesForm />
             </AddPhasesModal>
-          </div>
+          </div> }
         </CardHeader>
         <CardContent>
           <div className="grid place-items-center">

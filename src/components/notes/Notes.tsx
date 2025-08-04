@@ -8,8 +8,11 @@ import CreateNoteForm from "@/components/forms/CreateNoteForm";
 import { getNote } from "@/db/queries";
 import { format } from "date-fns";
 import { AlarmClockCheck, AlarmClockPlus } from "lucide-react";
+import { isCurrentUserAdmin } from "@/lib/dal";
 
 export default async function Notes({ tradeId }: { tradeId: string }) {
+
+  const isAdmin = await isCurrentUserAdmin();
 
   const noteData = await getNote(tradeId);
 
@@ -35,9 +38,13 @@ export default async function Notes({ tradeId }: { tradeId: string }) {
         }
       </CardHeader>
       <CardContent>
-        { !noteData ?
-          <CreateNoteForm tradeId={tradeId} /> :
+        { !noteData ? (
+            isAdmin ?
+            <CreateNoteForm tradeId={tradeId} /> :
+            <p className="text-muted-foreground">No note yet.</p>
+          ): 
           <Editor 
+            readOnly={!isAdmin}
             noteId={noteData.noteId} 
             note={noteData.note} 
             tradeId={tradeId}

@@ -21,11 +21,12 @@ type SaveNoteState = {
 } | undefined;
 
 export default function Editor (
-  { noteId, note, tradeId }:
+  { noteId, note, tradeId, readOnly }:
   {
     noteId: string,
     note: string | null,
-    tradeId: string
+    tradeId: string,
+    readOnly: boolean
   }
 ) {
 
@@ -70,7 +71,7 @@ export default function Editor (
         }}
         theme="snow"
         value={deltaValue}
-        readOnly={false}
+        readOnly={readOnly}
         onChange={(c, d, s, editor) => handleEditorChange(editor)}
       />
       {isChanged &&

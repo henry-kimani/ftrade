@@ -3,9 +3,13 @@ import SiteHeader from "@/components/SiteHeader";
 import AllowedUsers from "@/components/tables/AllowedUsers";
 import TradingPlans from "@/components/tradingplan/TradingPlans";
 import UserSettingsProfile from "@/components/user/UserSettingsProfile";
+import { verifyUser, checkUserRoleIsNone } from "@/lib/dal";
 import { Suspense } from "react";
 
 export default async function SettingsPage() {
+
+  await verifyUser();
+  await checkUserRoleIsNone();
 
   return (
     <div>

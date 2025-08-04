@@ -5,8 +5,11 @@ import { toSentenceCase, toGroupedStrategies } from "@/lib/utils";
 import { Label } from "@/components/ui/label";
 import ChooseTradeStrategiesModal from "@/components/modals/ChooseTradeStrategiesModal";
 import TradeStrategiesPopover from "@/components/TradeStrategiesPopover";
+import { isCurrentUserAdmin } from "@/lib/dal";
 
 export default async function Strategy({ tradeId }: { tradeId: string }) {
+  const isAdmin = await isCurrentUserAdmin();
+
   const tradeStrategies = await getPlansAndStrategiesForTrade(tradeId);
   const allTradingPlanStrategies = await getAllTradingPlansAndTheirStrategies();
 
@@ -23,6 +26,7 @@ export default async function Strategy({ tradeId }: { tradeId: string }) {
           </CardDescription>
         </div>
         <div>
+          { isAdmin &&
           <ChooseTradeStrategiesModal>
             <AddStrategyForm 
               tradeId={tradeId} // Trade to modify
@@ -31,12 +35,12 @@ export default async function Strategy({ tradeId }: { tradeId: string }) {
               // All strategies to choose from
               allTradingStrategies={toGroupedStrategies(allTradingPlanStrategies)}
             />
-          </ChooseTradeStrategiesModal>
+          </ChooseTradeStrategiesModal> }
         </div>
       </CardHeader>
       <CardContent>
         { tradeStrategies.length === 0 ?
-          <div>No strategies for this trade yet.</div>
+          <p className="text-muted-foreground">No strategies for this trade yet.</p>
           :
           <div className="grid gap-2 grid-cols-1 @md/main:grid-cols-2 @md/main:gap-9">
             {keys.map((key, index) => (

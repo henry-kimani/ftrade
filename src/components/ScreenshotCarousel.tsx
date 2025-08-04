@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
 import styles from "@/styles/ScreenshotCarousel.module.css";
@@ -11,14 +11,15 @@ import ScreenshotUploader from "@/components/forms/uppy/ScreenshotUploader";
 import DeleteScreenshot from "./forms/DeleteScreenshot";
 
 export default function ScreenshotCarousel(
-  { tradeId, screenshots }:
+  { tradeId, screenshots, isAdmin }:
   {
     tradeId: string,
     screenshots: ({
       screenshotId: string;
       screenshotPublicUrl: string;
       screenshotPath: string;
-    }| undefined)[]
+    }| undefined)[],
+    isAdmin: boolean
   }
 ) {
 
@@ -56,7 +57,7 @@ export default function ScreenshotCarousel(
                 alt="sample screenshot" width={500} height={100} 
                 className="w-full"
               />
-              <DeleteScreenshot screenshotId={shot.screenshotId} screenshotPath={shot.screenshotPath} />
+              { isAdmin && <DeleteScreenshot screenshotId={shot.screenshotId} screenshotPath={shot.screenshotPath} /> }
             </div>
           ))}
         </div>
@@ -73,7 +74,7 @@ export default function ScreenshotCarousel(
           </Button>
         </div>}
         <div className="justify-self-center">
-          <ScreenshotUploader tradeId={tradeId} />
+          { isAdmin && <ScreenshotUploader tradeId={tradeId} /> }
         </div>
         <div className="justify-self-end items-center flex">
           {Array.from({ length: screenshots.length }).map((_,index) => (

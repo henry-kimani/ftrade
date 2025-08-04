@@ -1,5 +1,5 @@
 import SiteHeader from "@/components/SiteHeader";
-import { verifyUser } from "@/lib/dal";
+import { checkUserRoleIsNone, verifyUser } from "@/lib/dal";
 import SearchTrade from "@/components/SearchTrade";
 import TradesTable from "@/components/tables/TradesTable";
 import Pagination from "@/components/Pagination";
@@ -12,6 +12,7 @@ export default async function Trades(props: {
   }>
 }) {
   await verifyUser();
+  await checkUserRoleIsNone();
 
   const searchParams = await props.searchParams;
   const searchTerm = searchParams?.search || "";
