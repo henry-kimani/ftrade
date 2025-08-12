@@ -1,0 +1,42 @@
+{
+  "MSG":"TRADE_HISTORY",
+  "TRADES":[
+    {
+      "SYMBOL":"EURUSD",
+      "MAGIC":0,
+      "TICKET":47099158,
+      "OPEN_TIME":"2022.04.12 13:26:59",
+      "CLOSE_TIME":"2022.04.12 13:27:15",
+      "OPEN_PRICE":1.08522,
+      "CLOSE_PRICE":1.08524,
+      "TYPE":"SELL",
+      "LOTS":0.01,
+      "STOP_LOSS":0.00000,
+      "TAKE_PROFIT":0.00000,
+      "SWAP":0.00,
+      "COMMISSION":0.00,
+      "COMMENT":"to #47099159",
+      "PROFIT":-0.02
+    },
+    {
+      "SYMBOL":"EURUSD",
+      "MAGIC":0,
+      "TICKET":47099144,
+      "OPEN_TIME":"2022.04.12 13:24:31",
+      "CLOSE_TIME":"2022.04.12 13:26:58",
+      "OPEN_PRICE":1.08547,
+      "CLOSE_PRICE":1.08523,
+      "TYPE":"BUY",
+      "LOTS":0.01,
+      "STOP_LOSS":0.00000,
+      "TAKE_PROFIT":0.00000,
+      "SWAP":0.00,
+      "COMMISSION":0.00,
+      "COMMENT":"from #47099143",
+      "PROFIT":0.24
+    }
+  ],
+  "ERROR_ID":0,
+  "ERROR_DESCRIPTION":"no error"
+}
+
