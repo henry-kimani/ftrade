@@ -5,6 +5,8 @@ in
 
   pkgs.mkShellNoCC {
     packages = with pkgs; [ 
+      valgrind
+      netcat-gnu
       supabase-cli
       podman-compose
       cowsay
