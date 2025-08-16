@@ -12,8 +12,8 @@ char* read_file(const char* filename);
 int run_server();
 
 int main() {
-  const char *account_status_request_json = "{\"MSG\": \"ACCOUNT_STATUS\"}";
-  const char *trade_history_request_json = "{\"MSG\": \"TRADE_HISTORY\"}";
+  const char *account_status_request_json = "{\"MSG\":\"ACCOUNT_STATUS\"}";
+  const char *trade_history_request_json = "{\"MSG\":\"TRADE_HISTORY\"}";
 
   const char *trade_history_file = "trade_history.json";
   char *trade_history_string = read_file(trade_history_file);
@@ -42,22 +42,18 @@ int main() {
 
   // Bind socket to an ip address
   int local_addr = bind(server_fd, (struct sockaddr*)&address, sizeof(address));
-  if (local_addr == -1) 
+  if (local_addr < 0) 
   {
     perror("Failed to bind socket to ip address. \n");
-    free(trade_history_string);
-    free(account_status_string);
-    return 1;
+    goto END;
   }
 
   // Listen for incoming connections
   int listener = listen(server_fd, 3);
-  if (listener) 
+  if (listener < 0) 
   {
     perror("Failed to listen for incoming connections. \n");
-    free(trade_history_string);
-    free(account_status_string);
-    return 1;
+    goto END;
   }
 
   printf("Socket server running on localhost port 8080 ... \n");
@@ -69,79 +65,91 @@ int main() {
     if (new_socket_fd < 0)
     {
       perror("Failed to accept connections.");
-      free(trade_history_string);
-      free(account_status_string);
       continue;
     }
 
-    printf("Connection accepted. \n");
+    printf("[ACCEPT]: Connection accepted. \n");
 
     // Data transfer
     char buffer[MAX_MESSAGE_SIZE] = {};
-    int read_bytes = read(new_socket_fd, buffer, sizeof(buffer));
-    if (read_bytes == -1) 
+
+    // Loop reading data
+    while(1) 
     {
-      perror("Failed to read the socket. \n");
-      free(trade_history_string);
-      free(account_status_string);
-      return 1;
-    }
-
-    // Split the client request token from the delimeter
-    char *client_token, *str, *tofree;
-    tofree = str = strdup(buffer);
-    client_token = strsep(&str, "\r\n");
-
-    // Decide what data to write to the new socket based on the request
-    if (strcmp(client_token, account_status_request_json) == 0) 
-    {
-      printf("ACC: %s\n", buffer);
-      int written_bytes = write(new_socket_fd, account_status_string, strlen(account_status_string));
-
-      if (written_bytes == -1) 
+      int read_bytes = read(new_socket_fd, buffer, sizeof(buffer));
+      if (read_bytes < 0) 
       {
-        perror("Failed to write to the socket.");
-        free(trade_history_string);
-        free(account_status_string);
-        return 1;
+        perror("Failed to read the socket. \n");
+        goto END_CLIENT;
       }
 
-    }
-    else if (strcmp(client_token, trade_history_request_json) == 0)
-    {
-      printf("TH: %s\n", buffer);
-      int written_bytes = write(new_socket_fd, trade_history_string, strlen(trade_history_string));
-
-      if (written_bytes == -1) 
+      // Client closed the connection
+      if (read_bytes == 0) 
       {
-        perror("Failed to write to the new socket.");
-        free(trade_history_string);
-        free(account_status_string);
-        return 1;
+        break;
       }
 
-    } 
-    else 
-    {
-      char *no_match = "No match. \n";
-      printf("%s", no_match);
-      int written_bytes = write(new_socket_fd, no_match, strlen(no_match));
+      // Split the client request token from the delimeter
+      char *client_token, *str, *tofree;
+      tofree = str = strdup(buffer);
+      client_token = strsep(&str, "\r\n");
 
-      if (written_bytes == -1) 
+      printf("[CLIENT]: %s \n", client_token);
+
+      // Decide what data to write to the new socket based on the request
+      if (strcmp(client_token, account_status_request_json) == 0) 
       {
-        perror("Failed to write to new socket");
-        free(trade_history_string);
-        free(account_status_string);
-        return 1;
+        int written_bytes = write(new_socket_fd, account_status_string, strlen(account_status_string));
+
+        if (written_bytes < 0) 
+        {
+          perror("Failed to write to the socket.");
+          goto END_CLIENT;
+        }
+
+        printf("[WRITE]: Write Account Status to the New socket. \n");
+      }
+      else if (strcmp(client_token, trade_history_request_json) == 0)
+      {
+        int written_bytes = write(new_socket_fd, trade_history_string, strlen(trade_history_string));
+
+        if (written_bytes < 0) 
+        {
+          perror("Failed to write to the new socket.");
+          goto END_CLIENT;
+        }
+
+        printf("[WRITE]: Write Trade History to the New socket. \n");
+      } 
+      else 
+      {
+        char *no_match = "No match. \n";
+        int written_bytes = write(new_socket_fd, no_match, strlen(no_match));
+
+        if (written_bytes < 0) 
+        {
+          perror("Failed to write to new socket");
+          goto END_CLIENT;
+        }
+
+        printf("[WRITE]: No match found from the request. \n");
       }
 
+      free(tofree);
     }
 
-    free(tofree);
+    END_CLIENT:
 
     close(new_socket_fd);
-    printf("Connection closed. \n");
+    printf("[CLOSED]: Connection from new socket closed. \n \n");
   }
+
+  END:
+
+  // Free the malloc memory
+  free(trade_history_string);
+  free(account_status_string);
+
   close(server_fd);
 
   return 0;
