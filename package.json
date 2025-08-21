@@ -25,6 +25,7 @@
     "@radix-ui/react-tooltip": "^1.2.7",
     "@supabase/ssr": "^0.6.1",
     "@supabase/supabase-js": "^2.50.0",
+    "@tanstack/react-query": "^5.85.5",
     "@uppy/core": "^4.4.7",
     "@uppy/dashboard": "^4.3.4",
     "@uppy/image-editor": "^3.3.3",
@@ -55,6 +56,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+    "@tanstack/eslint-plugin-query": "^5.83.1",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
