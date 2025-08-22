@@ -1,7 +1,4 @@
 import AddNewTradingPlan from "@/components/tradingplan/AddNewTradingPlans";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Button } from "../ui/button";
-import { Plus } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 import ModifyTradingStrategies from "@/components/tradingplan/ModifyTradingStrategies";
 import AddNewTradingPlanModal from "../modals/AddNewTradingPlanModal";
