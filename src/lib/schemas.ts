@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { roles } from "@/db/schema";
+import { AccountStatusType } from "./definitions";
 
 const AVATAR_FILE_SIZE_LIMIT = 5 * 1024 * 1024;
 const ALLOWED_MIME_TYPES = ['image/png', 'image/jpg', 'image/jpeg', 'image/webp'];
@@ -110,4 +111,56 @@ export const PhasesSchema = z.object({
 
 export const PhaseSchema = z.object({
   selectedPhaseId: z.string().uuid()
+});
+
+export const DataToSyncSchema = z.object({
+  accountStatus: z.object({
+    MSG: z.string(),
+    COMPANY: z.string(),
+    CURRENCY: z.string(),
+    NAME: z.string(),
+    SERVER: z.string(),
+    LOGIN: z.number(),
+    TRADE_MODE: z.number(),
+    LEVERAGE: z.number(),
+    LIMIT_ORDERS: z.number(),
+    MARGIN_SO_MODE: z.number(),
+    TRADE_ALLOWED: z.number(),
+    TRADE_EXPERT: z.number(),
+    BALANCE: z.number(),
+    CREDIT: z.number(),
+    PROFIT: z.number(),
+    EQUITY: z.number(),
+    MARGIN: z.number(),
+    MARGIN_FREE: z.number(),
+    MARGIN_LEVEL: z.number(),
+    MARGIN_SO_CAL: z.number(),
+    MARGIN_SO_SO: z.number(),
+    ERROR_ID: z.number(),
+    ERROR_DESCRIPTION: z.string()
+  }),
+  tradeHistory: z.object({
+    MSG: z.string(),
+    TRADES: z.array(
+      z.object({
+        SYMBOL: z.string(),
+        MAGIC: z.number(),
+        TICKET: z.number(),
+        OPEN_TIME: z.string(),
+        CLOSE_TIME: z.string(),
+        OPEN_PRICE: z.number(),
+        CLOSE_PRICE: z.number(),
+        TYPE: z.enum(["BUY", "SELL"]),
+        LOTS: z.number(),
+        STOP_LOSS: z.number(),
+        TAKE_PROFIT: z.number(),
+        SWAP: z.number(),
+        COMMISSION: z.number(),
+        COMMENT: z.string(),
+        PROFIT: z.number()
+      })
+      ,{ message: "ERROR HERE." }),
+    ERROR_ID: z.number(),
+    ERROR_DESCRIPTION: z.string()
+  })
 });
