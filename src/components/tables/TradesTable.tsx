@@ -22,13 +22,12 @@ export default async function TradesTable(
                 <td></td>
                 <td>TICKET</td>
                 <td>TYPE</td>
+                <td>SYM</td>
                 <td>DATE</td>
                 <td>EN PRICE</td>
                 <td>EX PRICE</td>
-                <td>LS</td>
                 <td>T PROF</td>
                 <td>S LOSS</td>
-                <td>RATIO</td>
                 <td>PROFIT</td>
               </tr>
             </thead>
@@ -52,13 +51,12 @@ export default async function TradesTable(
                   </td>
                   <td>{trade.ticket}</td>
                   <td>{trade.type}</td>
+                  <td>{trade.symbol}</td>
                   <td>{format(trade.entryTime, "PP")}</td>
                   <td>{Number(trade.entryPrice).toPrecision()}</td>
                   <td>{Number(trade.exitPrice).toPrecision()}</td>
-                  <td>{trade.lotSize}</td>
                   <td>{Number(trade.takeProfit).toPrecision()}</td>
                   <td>{Number(trade.stopLoss).toPrecision()}</td>
-                  <td>{trade.ratio}</td>
                   <td>{trade.profitInCents / 100}</td>
                 </tr>
               ))}

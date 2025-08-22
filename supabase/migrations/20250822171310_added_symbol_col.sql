@@ -1,0 +1,1 @@
+ALTER TABLE "trades" ADD COLUMN "symbol" text NOT NULL;

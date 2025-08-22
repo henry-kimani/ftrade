@@ -79,11 +79,12 @@ export async function getTradesTicketsForAccount(accountId: string) {
 
 export async function insertNewTrade({
   accountsId, ticket, type, entryTime, exitTime, entryPrice, exitPrice, lotSize, 
-  takeProfit, stopLoss, profitInCents
+  takeProfit, stopLoss, profitInCents, symbol
 }: {
     accountsId: string,
     ticket: number,
     type: "BUY" | "SELL",
+    symbol: string,
     entryTime: Date | Placeholder<string, any>,
     exitTime: Date | Placeholder<string, any>,
     entryPrice: string,
@@ -95,19 +96,20 @@ export async function insertNewTrade({
   }) {
   try {
     await db.insert(trades)
-      .values({
-        accountsId,
-        ticket,
-        type,
-        entryTime,
-        exitTime,
-        entryPrice,
-        exitPrice,
-        lotSize,
-        takeProfit,
-        stopLoss,
-        profitInCents
-      });
+    .values({
+      accountsId,
+      ticket,
+      type,
+      symbol,
+      entryTime,
+      exitTime,
+      entryPrice,
+      exitPrice,
+      lotSize,
+      takeProfit,
+      stopLoss,
+      profitInCents
+    });
   } catch (error) {
     console.error(error);
     throw Error("Failed to insert trade history.");

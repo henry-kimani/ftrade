@@ -90,6 +90,7 @@ export const trades = pgTable('trades', {
   accountsId: uuid().references(() => accounts.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
   ticket: integer().notNull(),
   type: tradeTypes().notNull(),
+  symbol: text().notNull(),
   entryTime: timestamp({ withTimezone: true }).notNull(),
   exitTime: timestamp({ withTimezone: true }).notNull(),
   entryPrice: numeric({ precision: 10, scale: 5 }).notNull(), // 12345.12345
