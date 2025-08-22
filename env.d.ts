@@ -2,7 +2,7 @@ declare namespace NodeJS {
   interface ProcessEnv {
     NEXT_PUBLIC_SUPABASE_URL: string;
     NEXT_PUBLIC_SUPABASE_ANON_KEY: string;
-    NEXT_PUBLIC_MT_SERVER_PORT: number;
+    NEXT_PUBLIC_FPROXY_API_KEY: string;
 
     INITIAL_ADMIN: string;
     DATABASE_URL: string;
