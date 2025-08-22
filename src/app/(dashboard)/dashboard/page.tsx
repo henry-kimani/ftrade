@@ -10,7 +10,7 @@ export default async function Dashboard() {
 
   return (
     <>
-      <div><SiteHeader heading="dashboard" /></div>
+      <SiteHeader heading="dashboard" />
       <main className="grid p-4 gap-4">
         <SectionCards />
         <div className="grid grid-cols-1 gap-4 @2xl/main:grid-cols-2">

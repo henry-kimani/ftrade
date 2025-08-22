@@ -4,7 +4,7 @@ import {
   SidebarHeader,
   SidebarFooter
 } from "@/components/ui/sidebar";
-import { AlignHorizontalDistributeCenter, AppWindowIcon, CircleDollarSign, Goal, Settings } from "lucide-react";
+import { AlignHorizontalDistributeCenter, AppWindowIcon, CircleDollarSign, Goal, RefreshCcw, Settings } from "lucide-react";
 import { SidebarMenuItem } from "./ui/sidebar";
 import Link from "next/link";
 import UserEmailProfile from "@/components/user/UserSidebarEmail";
@@ -25,6 +25,11 @@ const items = [
     title: "Trading View",
     url: "/tradingview",
     icon: AlignHorizontalDistributeCenter
+  },
+  {
+    title: "Sync Data",
+    url: "/sync-data",
+    icon: RefreshCcw
   }
 ];
 
