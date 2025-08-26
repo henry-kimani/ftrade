@@ -1,6 +1,6 @@
 import { allowedUsers, avatarUrls, notes, phases, Role, screenshotsUrls, strategies, trades, tradeStrategies, tradingPlans } from "@/db/schema";
 import { db } from "@/db/dbConn";
-import { desc, and, eq, ilike, like, notInArray, or, sql, count } from "drizzle-orm";
+import { desc, and, eq, ilike, like, notInArray, or, sql, count, gt, lt, lte } from "drizzle-orm";
 
 const FIRST_RESULT = 0;
 const ITEMS_PER_PAGE = 6;
@@ -408,3 +408,24 @@ export async function insertPhaseToTrade(tradeId: string, phaseId: string) {
     throw new Error("Could not insert phase");
   }
 }
+
+
+export async function getTotalProfit() {
+  const profit = await db.select({
+    profit: trades.profitInCents,
+  }).from(trades)
+    .where(gt(trades.profitInCents, 0));
+
+  return profit[FIRST_RESULT];
+}
+
+
+export async function getTotalLoss() {
+  const loss = await db.select({
+    loss: trades.profitInCents
+  }).from(trades)
+    .where(lte(trades.profitInCents, 0));
+
+  return loss[FIRST_RESULT];
+}
+
