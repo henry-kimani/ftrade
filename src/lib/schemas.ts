@@ -159,7 +159,7 @@ export const DataToSyncSchema = z.object({
         COMMENT: z.string(),
         PROFIT: z.number()
       })
-      ,{ message: "ERROR HERE." }),
+    ).min(1, { message: "No trades found to sync to Ftrade." }),
     ERROR_ID: z.number(),
     ERROR_DESCRIPTION: z.string()
   })
