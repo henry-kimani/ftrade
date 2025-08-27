@@ -429,3 +429,15 @@ export async function getTotalLoss() {
   return loss[FIRST_RESULT];
 }
 
+
+export async function getMostUsedPhase() {
+  const pc = await db.select({
+    phase: phases.phase,
+    phaseCount: count(trades.phasesId)
+  }).from(trades)
+    .innerJoin(phases, eq(phases.id, trades.phasesId))
+    .groupBy(phases.phase);
+
+  return pc;
+}
+

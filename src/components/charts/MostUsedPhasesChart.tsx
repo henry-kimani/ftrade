@@ -2,14 +2,22 @@ import { EChartsOption } from "echarts";
 import Echarts from "./Echarts";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 
-export default function MostUsedPhasesChart() {
+export default function MostUsedPhasesChart({
+  data
+}: {
+    data: {
+      phase: string,
+      phaseCount: number
+    }[]
+  }) {
 
-  const chartData = [
-    { name: "Phase A", value: 200 },
-    { name: "Phase B", value: 40 },
-    { name: "Phase C", value: 100 },
-    { name: "Phase D", value: 50 },
-  ];
+  if (!data) {
+    return <div>
+      No phase data yet.
+    </div>;
+  } 
+
+  const chartData = data.map(d => ({ name: d.phase, value: d.phaseCount }));
 
   const options: EChartsOption = {
     tooltip: {
