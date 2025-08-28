@@ -1,39 +1,58 @@
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-export default function SectionCards() {
+export default function SectionCards({
+  balance, winRate, profitLossRatio, profitLossCount
+}: {
+    balance: number,
+    winRate: number,
+    profitLossRatio: number[],
+    profitLossCount: {
+      profit: number;
+      loss: number;
+    }
+  }) {
+
   return (
     <div className="grid grid-cols-1 gap-4 @md/main:grid-cols-2 @4xl/main:grid-cols-4">
       <Card className="@container/card">
         <CardHeader>
           <Description>BALANCE</Description>
-          <Title>$1,000.00</Title>
-        </CardHeader>
-      </Card>
-
-      <Card className="@container/card">
-        <CardHeader>
-          <Description>TODAY'S PROFIT</Description>
-          <Title>$1,000.00</Title>
+          <Title>${balance}</Title>
         </CardHeader>
       </Card>
 
       <Card className="@container/card">
         <CardHeader>
           <Description>WIN RATE</Description>
-          <Title>$1,000.00</Title>
+          {/* win / total * 100 */}
+          <Title>{winRate}%</Title>
         </CardHeader>
       </Card>
 
       <Card className="@container/card">
         <CardHeader>
-          <Description>P&L RATIO</Description>
+          <Description>P & L RATIO</Description>
+          <Title>{profitLossRatio[0]}:{profitLossRatio[1]}</Title>
+        </CardHeader>
+      </Card>
+
+      <Card className="@container/card">
+        <CardHeader>
+          <Description>PROFIT & LOSS</Description>
           <Title className="flex h-full items-end">
             <div className="flex h-5 w-full">
-              <div className="basis-[30%] rounded-l-full h-full bg-green-500 grid place-items-center text-xs text-muted">
-                30%
+              <div 
+                // Into a percentage
+                style={{ flexBasis: profitLossCount.profit/(profitLossCount.profit + profitLossCount.loss) * 100 + "%" }} 
+                className="rounded-l-full h-full bg-green-500 grid place-items-center text-xs text-muted"
+              >
+                {profitLossCount.profit}
               </div>
-              <div className="basis-[70%] rounded-r-full h-full bg-red-500 grid place-items-center text-xs text-muted">
-                70%
+              <div 
+                style={{ flexBasis: profitLossCount.loss/(profitLossCount.profit + profitLossCount.loss) * 100 + "%" }} 
+                className="basis-[30%] rounded-r-full h-full bg-red-500 grid place-items-center text-xs text-muted"
+              >
+                {profitLossCount.loss}
               </div>
             </div>
           </Title>

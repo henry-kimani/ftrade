@@ -5,7 +5,7 @@ import { verifyUser, checkUserRoleIsNone } from "@/lib/dal";
 import YearlyRevenueChart from "@/components/charts/YearlyRevenueChart";
 import ProfitLossPieChart from "@/components/charts/ProfitLossPieChart";
 import MostUsedPhasesChart from "@/components/charts/MostUsedPhasesChart";
-import { getMostUsedPhase, getTotalLoss, getTotalProfit } from "@/db/queries";
+import { getAccountBalance, getMostUsedPhase, getProfitLossRatio, getTotalLoss, getTotalProfit, getTotalProfitLossCount, getWinRate } from "@/db/queries";
 
 export default async function Dashboard() {
   await checkUserRoleIsNone();
@@ -13,17 +13,28 @@ export default async function Dashboard() {
 
   const totalProfit = await getTotalProfit();
   const totalLoss = await getTotalLoss();
-
   const mostUsedPhase = await getMostUsedPhase();
+  const accountBalance = await getAccountBalance();
+  const winRate = await getWinRate();
+  const profitLossRatio = await getProfitLossRatio();
+  const profitLossCount = await getTotalProfitLossCount();
 
   return (
     <>
       <SiteHeader heading="dashboard" />
       <main className="grid p-4 gap-4">
-        <SectionCards />
+        <SectionCards 
+          balance={Number((accountBalance.balance/100).toFixed(2))} 
+          winRate={winRate}
+          profitLossRatio={profitLossRatio}
+          profitLossCount={profitLossCount}
+        />
         <div className="grid grid-cols-1 gap-4 @2xl:grid-cols-2">
           <Suspense fallback="Loading Chart ...">
-            <ProfitLossPieChart profit={totalProfit.profit * 100} loss={Math.abs(totalLoss.loss * 100)}  />
+            <ProfitLossPieChart 
+              profit={totalProfit.profit * 100} 
+              loss={Math.abs(totalLoss.loss * 100)}  
+            />
           </Suspense>
           <Suspense fallback="Loading Chart ...">
             <MostUsedPhasesChart data={mostUsedPhase} />

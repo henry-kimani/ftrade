@@ -1,4 +1,4 @@
-import { allowedUsers, avatarUrls, notes, phases, Role, screenshotsUrls, strategies, trades, tradeStrategies, tradingPlans } from "@/db/schema";
+import { accounts, allowedUsers, avatarUrls, notes, phases, Role, screenshotsUrls, strategies, trades, tradeStrategies, tradingPlans } from "@/db/schema";
 import { db } from "@/db/dbConn";
 import { desc, and, eq, ilike, like, notInArray, or, sql, count, gt, lt, lte } from "drizzle-orm";
 
@@ -441,3 +441,68 @@ export async function getMostUsedPhase() {
   return pc;
 }
 
+export async function getAccountBalance() {
+  const balance = await db.select({
+    balance: accounts.accountBalance
+  }).from(accounts);
+
+  return balance[FIRST_RESULT];
+}
+
+
+export async function getWinRate() {
+  const totalTrades = await db.select({
+    total: count()
+  }).from(trades);
+
+  const wonTrades = await db.select({
+    wonTrades: count()
+  }).from(trades)
+    .where(gt(trades.profitInCents, 0));
+
+  return Math.floor((wonTrades[FIRST_RESULT].wonTrades / totalTrades[FIRST_RESULT].total) * 100);
+}
+
+
+export async function getProfitLossRatio() {
+  const p = await db.select({
+    profit: trades.profitInCents,
+  }).from(trades)
+    .where(gt(trades.profitInCents, 0));
+
+  const l = await db.select({
+    loss: trades.profitInCents,
+  }).from(trades)
+    .where(lte(trades.profitInCents, 0));
+
+  const ratio = p[FIRST_RESULT].profit % l[FIRST_RESULT].loss;
+
+  /* If the remainder is 0, then ration:1 */
+  if (ratio === 0) {
+    if (p[FIRST_RESULT].profit > l[FIRST_RESULT].loss) {
+      return [p[FIRST_RESULT].profit/Math.abs(l[FIRST_RESULT].loss), 1];
+    } else {
+      return [ 1, p[FIRST_RESULT].profit/Math.abs(l[FIRST_RESULT].loss) ];
+    }
+  } else {
+    return [ p[FIRST_RESULT].profit, l[FIRST_RESULT].loss ];
+  }
+}
+
+
+export async function getTotalProfitLossCount() {
+  const profit = await db.select({
+    profit: count(trades.profitInCents)
+  }).from(trades)
+    .where(gt(trades.profitInCents, 0));
+
+  const loss = await db.select({
+    loss: count(trades.profitInCents)
+  }).from(trades)
+    .where(lte(trades.profitInCents, 0));
+
+  return {
+    profit: profit[FIRST_RESULT].profit , 
+    loss: loss[FIRST_RESULT].loss
+  };
+}
