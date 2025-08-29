@@ -20,18 +20,16 @@ export default async function Dashboard(props: {
   await verifyUser();
 
   const searchParams = await props.searchParams;
-  const searchTerm = Number(searchParams?.year) || 2022;
+  const searchTerm = Number(searchParams?.year) || 2024;
 
-  const totalProfit = await getTotalProfit();
-  const totalLoss = await getTotalLoss();
-  const mostUsedPhase = await getMostUsedPhase();
-  const accountBalance = await getAccountBalance();
-  const winRate = await getWinRate();
-  const profitLossRatio = await getProfitLossRatio();
-  const profitLossCount = await getTotalProfitLossCount();
-
-  const yearsForSelect = await getYearsForSelect();
-  const totalMonthlyProfit = await getMonthlyProfitForYear(searchTerm);
+  const [
+    totalProfit, totalLoss, mostUsedPhase, accountBalance, winRate, profitLossRatio,
+    profitLossCount, yearsForSelect, totalMonthlyProfit
+  ] = await Promise.all([
+    getTotalProfit(), getTotalLoss(), getMostUsedPhase(), getAccountBalance(),
+    getWinRate(), getProfitLossRatio(), getTotalProfitLossCount(), getYearsForSelect(),
+    getMonthlyProfitForYear(searchTerm),
+  ]);
 
   return (
     <>
