@@ -19,8 +19,10 @@ export default async function Dashboard(props: {
   await checkUserRoleIsNone();
   await verifyUser();
 
+  const currentYear = new Date();
+
   const searchParams = await props.searchParams;
-  const searchTerm = Number(searchParams?.year) || 2024;
+  const searchTerm = Number(searchParams?.year) || currentYear.getFullYear();
 
   const [
     totalProfit, totalLoss, mostUsedPhase, accountBalance, winRate, profitLossRatio,
