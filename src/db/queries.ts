@@ -1,6 +1,6 @@
 import { accounts, allowedUsers, avatarUrls, notes, phases, Role, screenshotsUrls, strategies, trades, tradeStrategies, tradingPlans } from "@/db/schema";
 import { db } from "@/db/dbConn";
-import { desc, and, eq, ilike, like, notInArray, or, sql, count, gt, lt, lte } from "drizzle-orm";
+import { desc, and, eq, ilike, like, notInArray, or, sql, count, gt, lt, lte, sum } from "drizzle-orm";
 
 const FIRST_RESULT = 0;
 const ITEMS_PER_PAGE = 6;
@@ -505,4 +505,43 @@ export async function getTotalProfitLossCount() {
     profit: profit[FIRST_RESULT].profit , 
     loss: loss[FIRST_RESULT].loss
   };
+}
+
+
+export async function getYearsForSelect() {
+  try {
+    const yearsToChoose = await db.select({
+      year: sql<number>`EXTRACT(YEAR FROM ${trades.entryTime}) AS select_year`
+    }).from(trades)
+      .groupBy(sql`EXTRACT(YEAR FROM ${trades.entryTime})`)
+      .orderBy(sql`select_year`);
+
+    return yearsToChoose;
+  } catch {
+    throw new Error("Database Error: Failed to get the years for the select.");
+  }
+}
+
+
+export async function getMonthlyProfitForYear(year: number) {
+  try {
+    const totalProfit = await db.select({
+      month: sql<number>`EXTRACT(MONTH FROM ${trades.entryTime}) AS month`,
+      totalMonthlyProfit: sum(trades.profitInCents)
+    }).from(trades)
+      .where(
+        // Filter only records of the specified year
+        sql`EXTRACT(YEAR FROM ${trades.entryTime}) = ${year}`
+      )
+      .groupBy(
+        // Group month, using both for flexibility
+        sql`EXTRACT(MONTH FROM ${trades.entryTime}), TO_CHAR(${trades.entryTime}, 'YYYY-MM')`
+      )
+      // Order the results by noth
+      .orderBy(sql`month`);
+
+    return totalProfit;
+  } catch {
+    throw new Error("Database Error: Could not get monthly profit for line chart.");
+  }
 }

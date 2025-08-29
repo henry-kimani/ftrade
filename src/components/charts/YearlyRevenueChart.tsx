@@ -1,59 +1,62 @@
 'use client';
 
 import React from "react";
-import {
-  Card, CardHeader, CardTitle, CardDescription, CardContent 
-} from "@/components/ui/card";
 import Echarts from "./Echarts";
 import { EChartsOption } from "echarts";
 
-const chartData = [
-  { month: "Jan", desktop: -56 },
-  { month: "Feb", desktop: 305 },
-  { month: "Mar", desktop: 237 },
-  { month: "Apr", desktop: -73 },
-  { month: "May", desktop: 209 },
-  { month: "Jul", desktop: 214 },
-  { month: "Aug", desktop: -14 },
-  { month: "Sep", desktop: 114 },
-  { month: "Oct", desktop: -30 },
-  { month: "Nov", desktop: 54 },
-  { month: "Dec", desktop: 94 },
-];
 
-const options: EChartsOption = {
-  backgroundColor: "rgba(255, 255, 255, 1)",
-  tooltip: {
-    trigger: 'axis',
-  },
-  xAxis: {
-    type: 'category',
-    data: chartData.map(d => d.month)
-  },
-  yAxis: {
-    type: 'value',
-  },
-  series: [
-    {
-      data: chartData.map(d => d.desktop),
-      type: 'line',
-      smooth: false,
-    }
-  ]
-};
+export default function YearlyRevenueChart({
+  monthlyProfit 
+}: {
+    monthlyProfit: {
+      month: number,
+      totalMonthlyProfit: string | null 
+    }[];
+  }) {
 
-export default function YearlyRevenueChart() {
+  if (!monthlyProfit || monthlyProfit.length < 1) {
+    return;
+  }
+
+  const months = {
+    1: "Jan",
+    2: "Feb",
+    3: "Mar",
+    4: "Apr",
+    5: "May",
+    6: "Jun",
+    7: "Jul",
+    8: "Aug",
+    9: "Sep",
+    10: "Oct",
+    11: "Nov",
+    12: "Dev"
+  };
+
+  const options: EChartsOption = {
+    backgroundColor: "rgba(255, 255, 255, 1)",
+    tooltip: {
+      trigger: 'axis',
+    },
+    xAxis: {
+      type: 'category',
+      data: monthlyProfit.map(d => months[d.month])
+    },
+    yAxis: {
+      type: 'value',
+    },
+    series: [
+      {
+        data: monthlyProfit.map(d => Number(d.totalMonthlyProfit)),
+        type: 'line',
+        smooth: false,
+      }
+    ]
+  };
+
   return (
     <section>
-      <Card>
-        <CardHeader>
-          <CardTitle>Yearly Revenue</CardTitle>
-          <CardDescription>The total revenue for each month</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Echarts option={options} />
-        </CardContent>
-      </Card>
+      <Echarts option={options} />
     </section>
   );
 }
