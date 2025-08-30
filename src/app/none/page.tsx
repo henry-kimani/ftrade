@@ -7,7 +7,7 @@ export default function NonePage() {
       <div className="grid gap-4 *:text-center">
         <h1 className="text-2xl font-semibold">Welcome to Ftrade</h1>
         <p className="text-muted-foreground block">
-          You are signed in. However, your current role is 'none'.
+          You are signed in. However, your current role is &lsquo;none&rsquo;.
           <br className="hidden sm:block"/>
           This means you are not allowed to see anything.
         </p>

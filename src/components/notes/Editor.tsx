@@ -115,7 +115,7 @@ function SaveNote(
         Save
         <Save />
       </Button>
-      {state?.errors?.note && state.errors.note.map(error => <p className="text-red-400 mt-2">{error}</p>)}
+      {state?.errors?.note && state.errors.note.map(error => <p key={error} className="text-red-400 mt-2">{error}</p>)}
       {state?.message && <p className="text-red-400 mt-2">{state?.message}</p>}
     </form>
   );

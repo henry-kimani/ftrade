@@ -1,8 +1,7 @@
 'use client';
 
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { init, getInstanceByDom, type EChartsOption, type EChartsInitOpts } from 'echarts';
-import { useDebouncedCallback } from 'use-debounce';
 import { useTheme } from 'next-themes';
 
 export default function Echarts({
@@ -36,24 +35,24 @@ export default function Echarts({
 
   // Intialize chart
   useEffect(() => {
-    const chart = init(echartsRef.current, theme, chartSettings);
+    const eChart = echartsRef.current;
+    const chart = init(eChart, theme, chartSettings);
 
     const resizeObserver = new ResizeObserver(() => {
       resizeChart();
     });
 
-    resizeObserver.observe(echartsRef.current);
+    resizeObserver.observe(eChart);
 
     return () => {
       chart.dispose();
 
-      if (echartsRef.current) {
-        resizeObserver.unobserve(echartsRef.current);
+      if (eChart) {
+        resizeObserver.unobserve(eChart);
       }
       resizeObserver.disconnect();
-      console.log("UNMOUNTED");
     };
-  }, [theme]);
+  }, [theme, chartSettings]);
 
   // Rerender chart when option changes
   useEffect(() => {
@@ -63,7 +62,7 @@ export default function Echarts({
       option.backgroundColor = theme ==="dark" ? "#171717" : "#f4f4f5";
       chart?.setOption(option, optionSettings);
     }
-  }, [option, theme]);
+  }, [option, optionSettings, theme]);
 
   return (
   <div ref={echartsRef} style={style}></div>

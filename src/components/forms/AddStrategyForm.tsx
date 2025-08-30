@@ -55,7 +55,7 @@ export default function AddStrategyForm(
 
       setSelectedStrategies(defaultTradeStrategies);
     }
-  }, []);
+  }, [defaultTradeStrategies]);
 
   function handleAddSelectedStrategies(selectedStrategy: string, checked: CheckedState) {
     if (!tradingPlan) return;

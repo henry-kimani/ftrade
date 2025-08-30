@@ -2,7 +2,7 @@
 
 import { Calendar } from "@/components/ui/calendar";
 import { useState } from "react";
-import { DateRange, DayPicker } from "react-day-picker";
+import { DateRange } from "react-day-picker";
 import { Popover, PopoverContent } from "../ui/popover";
 import { PopoverTrigger } from "@radix-ui/react-popover";
 import { Button } from "../ui/button";

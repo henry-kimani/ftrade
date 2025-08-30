@@ -1,4 +1,4 @@
-import { eq, Placeholder, sql } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { db } from "./dbConn";
 import { accounts, trades } from "./schema";
 
@@ -85,8 +85,8 @@ export async function insertNewTrade({
     ticket: number,
     type: "BUY" | "SELL",
     symbol: string,
-    entryTime: Date | Placeholder<string, any>,
-    exitTime: Date | Placeholder<string, any>,
+    entryTime: Date,
+    exitTime: Date,
     entryPrice: string,
     exitPrice: string,
     lotSize: string,

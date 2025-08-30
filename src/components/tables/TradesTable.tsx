@@ -1,6 +1,6 @@
 import { getFilteredTrades } from "@/db/queries";
 import { format } from "date-fns";
-import { CircleChevronLeft, CircleChevronRight, Link as L, SquareArrowOutUpRight } from "lucide-react";
+import { CircleChevronLeft, CircleChevronRight } from "lucide-react";
 import Link from "next/link";
 
 export default async function TradesTable(

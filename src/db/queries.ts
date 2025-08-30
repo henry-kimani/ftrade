@@ -1,6 +1,6 @@
-import { accounts, allowedUsers, avatarUrls, notes, phases, Role, screenshotsUrls, strategies, trades, tradeStrategies, tradingPlans } from "@/db/schema";
+import { allowedUsers, avatarUrls, notes, phases, Role, screenshotsUrls, strategies, trades, tradeStrategies, tradingPlans } from "@/db/schema";
 import { db } from "@/db/dbConn";
-import { desc, and, eq, ilike, like, notInArray, or, sql, count, gt, lt, lte, sum } from "drizzle-orm";
+import { desc, and, eq, ilike, notInArray, or, sql, count} from "drizzle-orm";
 
 const FIRST_RESULT = 0;
 const ITEMS_PER_PAGE = 6;
@@ -69,7 +69,7 @@ export async function getTradeById(tradeId: string) {
     const trade = await db.select().from(trades)
       .where(eq(trades.id, tradeId));
     return trade[FIRST_RESULT];
-  } catch(error) {
+  } catch {
     throw new Error("Failed to get trade");
   }
 }
@@ -232,8 +232,7 @@ export async function getFilteredTrades(
       .limit(ITEMS_PER_PAGE)
       .offset((currentPage - 1) * ITEMS_PER_PAGE);
 
-  } catch (error) {
-    console.log(error);
+  } catch {
     throw new Error('Failed to fetch filtered trades');
   }
 }
@@ -273,7 +272,7 @@ export async function getNote(tradeId: string) {
       .where(eq(notes.tradesId, tradeId));
 
     return note[FIRST_RESULT];
-  } catch(error) {
+  } catch {
     throw new Error("Failed to get note");
   }
 }
@@ -284,7 +283,7 @@ export async function createNote(tradeId: string) {
     await db.insert(notes).values({
       tradesId: tradeId
     });
-  } catch(error) {
+  } catch {
     throw new Error("Failed to create Note");
   }
 }
@@ -309,7 +308,7 @@ export async function getUserAvatarURl(userId: string) {
     }).from(avatarUrls).where(eq(avatarUrls.userId, userId));
 
     return avatarUrl[FIRST_RESULT];
-  } catch (error){
+  } catch {
     throw new Error("Could not get avatar url.");
   }
 }
@@ -320,8 +319,7 @@ export async function updateAvatarURL(url: string, userId:string) {
     await db.update(avatarUrls).set({
       avatarUrl: url
     }).where(eq(avatarUrls.userId, userId));
-  } catch(error) {
-    console.log(error);
+  } catch {
     throw new Error("Could not update avatar url");
   }
 }
@@ -334,8 +332,7 @@ export async function getScreenshotUrls(tradeId: string) {
       screenshotUrl: screenshotsUrls.screenshotUrl
     }).from(screenshotsUrls).where(eq(screenshotsUrls.tradesId, tradeId))
   }
-  catch(error) {
-    console.log(error);
+  catch {
     throw new Error("Could not get screenshots");
   }
 }
@@ -347,8 +344,7 @@ export async function uploadScreenshotsUrls(tradeId: string, url: string) {
       tradesId: tradeId,
       screenshotUrl: url
     });
-  } catch (error) {
-    console.log(error)
+  } catch {
     throw new Error("Failed to upload url to db")
   }
 }
@@ -357,8 +353,7 @@ export async function uploadScreenshotsUrls(tradeId: string, url: string) {
 export async function deleteScreenshot(screenshotId: string) {
   try {
   await db.delete(screenshotsUrls).where(eq(screenshotsUrls.id, screenshotId));
-  } catch (error) {
-    console.log();
+  } catch {
     throw new Error("Could not delete screenshot");
   }
 }

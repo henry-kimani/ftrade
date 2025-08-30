@@ -4,7 +4,7 @@ import SiteHeader from "@/components/SiteHeader";
 import TradingViewForm from "@/components/forms/TradingViewForm";
 import TradingViewWidget from "@/components/charts/TradingViewWidget";
 import { CheckedState } from "@radix-ui/react-checkbox";
-import { useState, FormEvent } from "react";
+import { useState } from "react";
 
 export default function TradingView(
   { databaseIndicators }:

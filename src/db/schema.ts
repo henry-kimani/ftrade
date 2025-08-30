@@ -6,7 +6,7 @@ import {
   QueryBuilder, 
 } from "drizzle-orm/pg-core";
 import { authenticatedRole, authUid, authUsers } from "drizzle-orm/supabase";
-import { sql, InferEnum, gte } from "drizzle-orm";
+import { sql, InferEnum } from "drizzle-orm";
 import { timestamps } from "@/db/helpers";
 import { eq } from "drizzle-orm";
 

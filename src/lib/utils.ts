@@ -12,8 +12,8 @@ export function toSentenceCase(string: string) {
   return string.replace(matchFirstChar, capitalizedChar);
 }
 
-export function isObjEmpty(obj: Object) {
-  for (let _ in obj) return true;
+export function isObjEmpty(obj: object) {
+  for (const _ in obj) return true;
   return false;
 }
 

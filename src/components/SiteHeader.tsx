@@ -2,7 +2,6 @@
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 import SiteHeading from "@/components/SiteHeading";
-import ThemeToggle from "./ThemeToggle";
 
 export default function  SiteHeader(
   { heading, children, isLogin=false }:

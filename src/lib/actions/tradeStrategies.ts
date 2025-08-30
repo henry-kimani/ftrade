@@ -6,7 +6,6 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { isUserAdmin, updateStrategiesForTrade, updateEdittedTradingPlan, deleteTradingPlan, newTradingPlan } from "@/db/queries";
 import { UpdateTradeStrategiesSchema, NewTradingPlansSchema, EdittedTradingPlansSchema } from "@/lib/schemas";
-import { UpdateTradeStrategies } from "@/lib/definitions";
 
 
 
@@ -30,7 +29,7 @@ export async function updateStrategiesForTradeAction(tradeId:string, formData: F
 
   try {
     await updateStrategiesForTrade({ tradeId, newStrategies: validatedValues.data.tradeStrategies });
-  } catch(error) {
+  } catch {
     return { message: "Database Error" };
   }
 
@@ -63,7 +62,7 @@ export async function newTradingPlanAction(prevState: State, formData: FormData)
       tradingPlan: validatedValues.data.tradingPlan,
       newStrategies: validatedValues.data.strategies
     });
-  } catch(error) {
+  } catch {
     return { message: "An error occured" }
   }
 

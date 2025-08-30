@@ -4,14 +4,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { uploadAvatarAction } from "@/lib/actions/avatar";
 import { ImageUpIcon } from "lucide-react";
-import { ChangeEvent, useActionState, useRef } from "react";
+import { useActionState, useRef } from "react";
 
 export default function AvatarForm() {
   const formRef = useRef<HTMLFormElement>(null);
   const initialState = { errors: {}, message: null };
   const [state, formAction] = useActionState(uploadAvatarAction, initialState);
 
-  function handleInputChange(event: ChangeEvent<HTMLInputElement>) {
+  function handleInputChange() {
     if (formRef.current) {
       formRef.current.requestSubmit();
     }
@@ -33,7 +33,7 @@ export default function AvatarForm() {
           name="avatar"
           className="opacity-0 w-10"
           placeholder="profile"
-          onChange={(e) => handleInputChange(e)} 
+          onChange={() => handleInputChange()} 
           type="file"
         />
         {state?.errors?.avatar &&

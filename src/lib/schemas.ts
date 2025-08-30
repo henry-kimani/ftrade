@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { roles } from "@/db/schema";
-import { AccountStatusType } from "./definitions";
 
 const AVATAR_FILE_SIZE_LIMIT = 5 * 1024 * 1024;
 const ALLOWED_MIME_TYPES = ['image/png', 'image/jpg', 'image/jpeg', 'image/webp'];

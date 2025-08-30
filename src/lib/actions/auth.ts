@@ -85,7 +85,7 @@ export async function createUser(prevState: State, formData: FormData) {
       return { message: "User already exists." };
     }
 
-  } catch(error) {
+  } catch {
     return { message: "An error occured." };
   } 
 

@@ -85,7 +85,7 @@ export default function AddPhasesForm() {
             <div className="text-xs text-muted-foreground">No phases added.</div>
           }
           {state?.errors?.addedPhases &&
-            state.errors.addedPhases.map(err => <p className="mt-2 text-red-400">{err}</p>)
+            state.errors.addedPhases.map(err => <p key={err} className="mt-2 text-red-400">{err}</p>)
           }
         </div>
         <div className="flex gap-4">

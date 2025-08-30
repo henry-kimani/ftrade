@@ -47,7 +47,7 @@ export default function ModifyTradingPlansForm(props:
     if (strategiesWithIds && strategiesWithIds.length > 0) {
       setStrategies(strategiesWithIds);
     }
-  },[]);
+  },[strategiesWithIds]);
 
   function handleStrategyChange(strategy: string, strategyId: string, remove=false) {
 
@@ -114,7 +114,7 @@ export default function ModifyTradingPlansForm(props:
               name="trading-plan"
               defaultValue={tradingPlan}
             />
-            {errors?.error?.tradingPlan && errors.error.tradingPlan.map((err) => <p className="text-red-400 mt-1">{err}</p>)}
+            {errors?.error?.tradingPlan && errors.error.tradingPlan.map((err) => <p key={err} className="text-red-400 mt-1">{err}</p>)}
           </div>
 
           {/* Edit existing strategies */}
@@ -138,7 +138,7 @@ export default function ModifyTradingPlansForm(props:
                   ><Trash2 /></Button>
                 </div>
               ))}
-              {errors?.error?.edittedStrategies && errors.error.edittedStrategies.map((err) => <p className="text-red-400 mt-1">{err}</p>)}
+              {errors?.error?.edittedStrategies && errors.error.edittedStrategies.map((err) => <p key={err} className="text-red-400 mt-1">{err}</p>)}
             </div>
           </div>
 
@@ -167,7 +167,7 @@ export default function ModifyTradingPlansForm(props:
                       />
                     </div>
                   ))}
-                  {errors?.error?.newStrategies && errors.error.newStrategies.map((err) => <p className="text-red-400 mt-1">{err}</p>)}
+                  {errors?.error?.newStrategies && errors.error.newStrategies.map((err) => <p key={err} className="text-red-400 mt-1">{err}</p>)}
                 </div>
               </div>
             }
@@ -208,7 +208,7 @@ export default function ModifyTradingPlansForm(props:
           <br />
           If those strategies, were used in trades, it will delete the relationship
           between the strategies and the trades. However the trades will remain.
-          Only the trade's strategies with disappear.
+          Only the trade&apos;s strategies with disappear.
         </p>
         <DeleteTradingPlan id={tradingPlanId} />
       </div>
@@ -232,6 +232,3 @@ function DeleteTradingPlan({ id }: { id: string }) {
   );
 }
 
-function hasProperty(arr: StrategyType[], prop: string) {
-  return arr.some(s => s.hasOwnProperty(prop));
-}
