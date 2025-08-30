@@ -29,7 +29,7 @@ export default function ChooseYearForChartForm({
 
   return (
     <div>
-      <Select onValueChange={(value) => handleSelectChange(value)}>
+      <Select defaultValue={searchParams.get('year')?.toString()} onValueChange={(value) => handleSelectChange(value)}>
         <SelectTrigger>
           <SelectValue placeholder="Select Year" />
         </SelectTrigger>
