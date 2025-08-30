@@ -17,7 +17,7 @@ export default function SyncToMT() {
 
   return (
     <div>
-      <Card className="!p-0 border-0 !bg-transparent">
+      <Card className="*:px-0 border-0 !bg-transparent">
         <CardHeader>
           <CardTitle className="text-xl">Sync Data</CardTitle>
           <CardDescription>
