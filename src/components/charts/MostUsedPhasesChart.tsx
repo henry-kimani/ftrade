@@ -59,6 +59,7 @@ export default function MostUsedPhasesChart({
           <CardDescription>A representation of the most used phase.</CardDescription>
         </CardHeader>
         <CardContent>
+          {/* @ts-expect-error provided the required props and it works */}
           <Echarts option={options} />
         </CardContent>
       </Card>

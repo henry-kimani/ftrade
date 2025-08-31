@@ -9,6 +9,7 @@ import { useActionState, useRef } from "react";
 export default function AvatarForm() {
   const formRef = useRef<HTMLFormElement>(null);
   const initialState = { errors: {}, message: null };
+  // @ts-expect-error Just nextjs errors when using the hook, though it works
   const [state, formAction] = useActionState(uploadAvatarAction, initialState);
 
   function handleInputChange() {

@@ -26,8 +26,7 @@ export default function ChoosePhaseForm(
     formData.append("selected-phase-id", value);
 
     const insertPhaseToTradeWithTradeId = insertPhaseToTradeAction.bind(null, tradeId);
-    const errors = await insertPhaseToTradeWithTradeId(formData);
-    console.log(errors);
+    await insertPhaseToTradeWithTradeId(formData);
   }
 
   return (
@@ -46,7 +45,7 @@ export default function ChoosePhaseForm(
               value={id}
               key={id}
             >
-              <div className="size-8 rounded-md" style={{ backgroundColor: phaseColor }}></div>
+              { phaseColor && <div className="size-8 rounded-md" style={{ backgroundColor: phaseColor }}></div> }
               <span>{toSentenceCase(phase)}</span>
             </SelectItem>
           ))}

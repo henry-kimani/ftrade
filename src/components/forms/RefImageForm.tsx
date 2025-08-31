@@ -20,6 +20,7 @@ export default function RefImageForm() {
         placeholder="F"
         name="reference-image" 
         type="file"
+        accept="image/png"
         onChange={() => formRef?.current?.requestSubmit()}
       />
     </form>

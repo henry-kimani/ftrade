@@ -46,6 +46,7 @@ export default async function AddPhases() {
               />}
           </div>
           {phases && phases.map(({ id, phase, phaseColor }) => (
+            phaseColor &&
             <div key={id} className="flex justify-between items-center my-2">
               <span>{toSentenceCase(phase)}</span>
               <div className="size-9 rounded-md" style={{ backgroundColor: phaseColor }}></div>

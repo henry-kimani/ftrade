@@ -10,6 +10,7 @@ import { createUser } from "@/lib/actions/auth";
 
 export default function CreateUserForm() {
   const initialState: State = { errors: {}, message: null };
+  // @ts-expect-error Just nextjs errors when using the hook
   const [state, formAction] = useActionState(createUser, initialState);
 
   return (

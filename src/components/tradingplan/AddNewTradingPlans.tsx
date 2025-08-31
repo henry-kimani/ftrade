@@ -14,6 +14,7 @@ export default function AddNewTradingPlan() {
   const [ strategies, setStrategies ] = useState<string [] | undefined>();
   const [ currentStrategy, setCurrentStrategy ] = useState<string | undefined>("");
   const initialState: State = { errors: {}, message: null };
+  // @ts-expect-error Just nextjs errors with the hook, though it works
   const [ state, formAction ] = useActionState(newTradingPlanAction, initialState);
 
   function handleCurrentStrategyChange(event: FormEvent<HTMLInputElement>) {

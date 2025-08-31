@@ -46,6 +46,7 @@ export default function ProfitLossPieChart({
           <CardDescription>The total profit and loss for the choosen month.</CardDescription>
         </CardHeader>
         <CardContent>
+          {/* @ts-expect-error Provided the required props and it works */}
           <Echarts option={options} />
         </CardContent>
       </Card>

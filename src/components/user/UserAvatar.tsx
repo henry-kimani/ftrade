@@ -12,7 +12,7 @@ export default function UserAvatar(
     height=50
   }:
   {
-    imgUrl: string | undefined;
+    imgUrl: string | null;
     className?: string;
     fallbackLetter: string;
     width: number;

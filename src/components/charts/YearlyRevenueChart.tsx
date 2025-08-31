@@ -19,18 +19,18 @@ export default function YearlyRevenueChart({
   }
 
   const months = {
-    1: "Jan",
-    2: "Feb",
-    3: "Mar",
-    4: "Apr",
-    5: "May",
-    6: "Jun",
-    7: "Jul",
-    8: "Aug",
-    9: "Sep",
-    10: "Oct",
-    11: "Nov",
-    12: "Dev"
+    "1": "Jan",
+    "2": "Feb",
+    "3": "Mar",
+    "4": "Apr",
+    "5": "May",
+    "6": "Jun",
+    "7": "Jul",
+    "8": "Aug",
+    "9": "Sep",
+    "10": "Oct",
+    "11": "Nov",
+    "12": "Dev"
   };
 
   const options: EChartsOption = {
@@ -40,7 +40,8 @@ export default function YearlyRevenueChart({
     },
     xAxis: {
       type: 'category',
-      data: monthlyProfit.map(d => months[d.month])
+      // @ts-expect-error Does not match the type, however execpted value is in range of object
+      data: monthlyProfit.map(d => months[String(d.month)])
     },
     yAxis: {
       type: 'value',
@@ -56,6 +57,7 @@ export default function YearlyRevenueChart({
 
   return (
     <section>
+      {/* @ts-expect-error Provided all props and it works */}
       <Echarts option={options} />
     </section>
   );

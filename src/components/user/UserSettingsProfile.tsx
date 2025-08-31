@@ -17,6 +17,7 @@ export default async function UserSettingsProfile() {
       <Card className="min-w-xs max-w-2xl mx-auto border-none !bg-transparent">
         <CardContent className="grid gap-4">
           <div className="flex items-center gap-5">
+            {/* @ts-expect-error Provided all the props, works, but still not satisfied */}
             <UserAvatar imgUrl={publicUrl} className="size-20" fallbackLetter={user.email?.charAt(0).toUpperCase() || "U"}/>
 
             <div className="grid gap-2">

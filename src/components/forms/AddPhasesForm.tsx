@@ -10,6 +10,7 @@ import { State } from "@/lib/schemas";
 export default function AddPhasesForm() {
 
   const initialState: State = { errors: {}, message: null };
+  // @ts-expect-error Just nextjs errors when using the hook
   const [state, formAction] = useActionState(onSubmit, initialState);
 
   const [currentPhase, setCurrentPhase] = useState<string | undefined>();

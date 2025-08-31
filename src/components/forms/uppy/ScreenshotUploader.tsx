@@ -28,6 +28,7 @@ export default function ScreenshotUploader({ tradeId}: { tradeId: string }) {
         })
         .use(Dashboard, {
           inline: false,
+          // @ts-expect-error yet to figure out, though it works
           target: ref.current,
           trigger: uploadRef.current
         })

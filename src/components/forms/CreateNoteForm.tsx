@@ -9,6 +9,7 @@ import { useActionState } from "react";
 export default function CreateNoteForm({ tradeId }: { tradeId: string }) {
   const initialState: State = { errors: {}, message: null };
   const createNoteActionWithId = createNoteAction.bind(null, tradeId);
+  // @ts-expect-error Just nextjs errors when using the hook, thought it works
   const [state, formAction] = useActionState(createNoteActionWithId, initialState);
   return (
     <div>

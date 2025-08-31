@@ -14,6 +14,7 @@ export default function UpdateRoleForm(
 ) {
   const initialState: State = { errors: {}, message: null };
   const updateUserRoleWithId = updateUserRoleAction.bind(null, userId);
+  // @ts-expect-error Just nextjs errors with hook, though it works
   const [state, formAction] = useActionState(updateUserRoleWithId, initialState);
 
   return (

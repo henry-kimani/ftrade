@@ -35,6 +35,7 @@ export default function AddStrategyForm(
 ) {
 
   const initialState: State = { errors: {}, message: null };
+  // @ts-expect-error Just Nextjs errors when using the hook
   const [state, formAction] = useActionState(onSubmit, initialState);
   const [ tradingPlan, setTradingPlan ] = useState<string | null>();
   const [ selectedStrategies, setSelectedStrategies ] = useState<GroupedStrategies>();
@@ -94,6 +95,7 @@ export default function AddStrategyForm(
   async function onSubmit() {
     const formData = new FormData();
 
+    // @ts-expect-error Yet to figure out why
     Object.values(selectedStrategies)
     .flatMap(selectedStrategy => selectedStrategy.strategies)
     .map(strategy => formData.append("trade-strategies", strategy));

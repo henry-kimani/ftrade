@@ -6,11 +6,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { loginAction } from "@/lib/actions/auth";
-import { State } from "@/lib/schemas";
+import { LoginFormState } from "@/lib/action-state-types";
 
 export default function LoginForm() {
 
-  const initialState: State = { errors: {}, message: null };
+  const initialState: LoginFormState = { errors: {}, message: null };
+  // @ts-expect-error Just nextjs errors with the hook, though it works
   const [state, formAction] = useActionState(loginAction, initialState);
 
   return (

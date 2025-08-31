@@ -42,7 +42,9 @@ export default function Echarts({
       resizeChart();
     });
 
-    resizeObserver.observe(eChart);
+    if (eChart) {
+      resizeObserver.observe(eChart);
+    }
 
     return () => {
       chart.dispose();

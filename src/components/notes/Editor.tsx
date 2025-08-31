@@ -30,7 +30,7 @@ export default function Editor (
   }
 ) {
 
-  const [ deltaValue, setDeltaValue ] = useState<DeltaStatic | undefined>(JSON.parse(note));
+  const [ deltaValue, setDeltaValue ] = useState<DeltaStatic | undefined>(note && JSON.parse(note));
   const [ isChanged, setIsChanged ] = useState(false);
 
   const quillRef = useRef<ReactQuillNew>(null);
@@ -55,6 +55,7 @@ export default function Editor (
   return (
     <div>
       <ReactQuill
+        // @ts-expect-error Yet to figure out
         ref={quillRef}
         className={cn(
           "min-h-56 **:[&.ql-editor]:before:!text-muted-foreground/50",

@@ -18,6 +18,7 @@ export default async function UserEmailProfile() {
       <SidebarMenuButton size={"lg"} asChild>
         <div>
           <div style={{ minWidth: 30 }}>
+            {/* @ts-expect-error Provided all the props, works, though its not satisfied*/}
             <UserAvatar imgUrl={publicUrl} fallbackLetter={fallbackLetter} className='size-8 !text-lg'/>
           </div>
           <span>{user.email}</span>

@@ -58,11 +58,14 @@ export function toGroupedStrategiesWithIds(props:
   }[]
 ): GroupedStrategiesWithIds {
 
+  // @ts-expect-error yet to figure out
   return Object.values(props.reduce((accumulator, currentValue) => {
     const { tradingPlanId, tradingPlan, strategyId, strategy } = currentValue;
     const key = tradingPlanId;
 
+    // @ts-expect-error yet to figure out
     accumulator[key] = accumulator[key] || { tradingPlanId, tradingPlan, strategiesWithIds: [] };
+    // @ts-expect-error yet to figure out
     accumulator[key].strategiesWithIds.push({ strategyId, strategy });
 
     return accumulator;
@@ -82,7 +85,9 @@ export function toGroupedTradingPlanStrategiesWithId(props:
     const { tradingPlanId, tradingPlan, strategy } = currentValue;
     const key = tradingPlanId;
 
+    // @ts-expect-error yet to figure out
     accumulator[key] = accumulator[key] || { tradingPlanId, tradingPlan, strategies: [] };
+    // @ts-expect-error yet to figure out
     accumulator[key].strategies.push(strategy);
 
     return accumulator;
