@@ -92,6 +92,13 @@
       "when": 1755882790157,
       "tag": "20250822171310_added_symbol_col",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1756622692225,
+      "tag": "20250831064452_enable-rls-4-tables",
+      "breakpoints": true
     }
   ]
 }

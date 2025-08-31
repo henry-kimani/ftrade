@@ -73,7 +73,7 @@ export const accounts = pgTable('accounts', {
   leverage: smallint(), // the current leverage being used in the login
   tradeMode: boolean(), // the current_trade_mode in meta_trader
   ...timestamps
-});
+}).enableRLS();
 
 
 /* Keeps track of the trading plans, to which a type of trading plan can have
@@ -82,7 +82,7 @@ export const tradingPlans= pgTable('trading_plans', {
   id: uuid().primaryKey().notNull().defaultRandom(),
   tradingPlan: text().notNull(),
   ...timestamps
-});
+}).enableRLS();
 
 
 export const trades = pgTable('trades', {
@@ -101,14 +101,14 @@ export const trades = pgTable('trades', {
   ratio: real(), // can be an approximation since its determined at runtime and rounded up
   profitInCents: integer().notNull(),
   phasesId: uuid().references(() => phases.id, { onDelete: 'cascade', onUpdate: 'cascade' })
-});
+}).enableRLS();
 
 /* Keep track of the many-to-many relationship between trades and strategies */ 
 export const tradeStrategies = pgTable('trade_strategies', {
   id: uuid().primaryKey().defaultRandom().notNull(),
   tradesId: uuid().references(() => trades.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
   strategiesId: uuid().references(() => strategies.id, { onDelete: 'cascade', onUpdate: 'cascade' })
-});
+}).enableRLS();
 
 
 /* Keep track of the strategies that can be used in trades and what group(plans) those
@@ -118,7 +118,7 @@ export const strategies = pgTable('strategies', {
   tradingPlansId: uuid().references(() => tradingPlans.id, { onDelete: 'cascade', onUpdate: 'cascade' }),// To tells us what group this strategy belongs to
   strategy: text(),
   ...timestamps
-});
+}).enableRLS();
 
 
 /* A trade can only have one note, one-to-one relationship */
@@ -127,7 +127,7 @@ export const notes = pgTable('notes', {
   note: text(), // can be null
   tradesId: uuid().references(() => trades.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
   ...timestamps
-});
+}).enableRLS();
 
 
 /* A trade can have many screenshot_urls */
@@ -135,7 +135,7 @@ export const screenshotsUrls = pgTable('screenshots_urls', {
   id: uuid().primaryKey().defaultRandom().notNull(),
   tradesId: uuid().references(() => trades.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
   screenshotUrl: text() // there can be nothing in the screenshots for a trade
-});
+}).enableRLS();
 
 
 export const phases = pgTable('phases', {
@@ -148,4 +148,4 @@ export const phases = pgTable('phases', {
       sql`${table.phaseColor} IS NULL OR ${table.phaseColor} ~* '^#[a-f0-9]{6}$'`
     ),
   ]
-);
+).enableRLS();
