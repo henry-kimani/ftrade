@@ -145,3 +145,34 @@ export function genPathName(
 }
 
 
+export function calculateRatio(num1: number | undefined, num2: number | undefined) {
+  // Check if the numbers are defined
+  if (!(num1 && num2)) {
+    return undefined;
+  }
+
+  // Check if the numbers are zero
+  if (num1 === 0) {
+    return [ num1, 0 ];
+  }
+
+  if (num2 === 0) {
+    return [ 0, num2 ];
+  }
+
+  // Get rid of negative number
+  num1 = Math.abs(num1);
+  num2 = Math.abs(num2);
+
+  const remainder = num1 % num2;
+
+  if (remainder === 0) {
+    if (num1 > num2) {
+      return [ Math.floor(num1/num2) , 1 ];
+    } else {
+      return [ 1, Math.floor(num2/num1) ];
+    }
+  } else {
+    return [ num1, num2 ];
+  }
+}

@@ -1,6 +1,7 @@
 import { db } from "./dbConn";
 import { gt, and, lte, count, eq, sql, sum, gte } from "drizzle-orm";
 import { trades, phases, accounts } from "./schema";
+import { calculateRatio } from "@/lib/utils";
 
 const FIRST_RESULT = 0;
 
@@ -22,7 +23,7 @@ export async function getTotalProfit({ from, to}: RangeType) {
         )
       );
 
-    return profit[FIRST_RESULT] ? profit[FIRST_RESULT] : undefined;
+    return profit[FIRST_RESULT] ? profit[FIRST_RESULT] : { profit: 0 };
   } catch {
     throw new Error("Database Error: Failed to get total profit.");
   }
@@ -42,7 +43,7 @@ export async function getTotalLoss({ from, to}: RangeType) {
       )
     );
 
-  return loss[FIRST_RESULT] ? loss[FIRST_RESULT] : undefined;
+  return loss[FIRST_RESULT] ? loss[FIRST_RESULT] : { loss: 0 };
   } catch {
     throw new Error("Database Error: Failed to get total loss.");
   }
@@ -133,24 +134,15 @@ export async function getProfitLossRatio({ from, to }: RangeType) {
 
 
     if (
-      !(l && p) ||
-        (l.length < 1 && p.length < 1)
+      !(l && p) || 
+      (l.length < 0 && p.length < 0) || 
+      !(p[FIRST_RESULT] && l[FIRST_RESULT])
     ) {
       return undefined;
     }
 
-    const ratio = p[FIRST_RESULT].profit % l[FIRST_RESULT].loss;
+    return calculateRatio(p[FIRST_RESULT].profit || undefined, l[FIRST_RESULT].loss || undefined);
 
-    /* If the remainder is 0, then ration:1 */
-    if (ratio === 0) {
-      if (p[FIRST_RESULT].profit > l[FIRST_RESULT].loss) {
-        return [p[FIRST_RESULT].profit/Math.abs(l[FIRST_RESULT].loss), 1];
-      } else {
-        return [ 1, p[FIRST_RESULT].profit/Math.abs(l[FIRST_RESULT].loss) ];
-      }
-    } else {
-      return [ p[FIRST_RESULT].profit, l[FIRST_RESULT].loss ];
-    }
   } catch {
     throw new Error("Database Error: Failed to get profit loss ratio.")
   }

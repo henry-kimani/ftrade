@@ -50,7 +50,7 @@ export default async function Dashboard(props: {
       </SiteHeader>
       <main className="grid p-4 gap-4">
         {(
-          profitLossRatio && profitLossCount && totalLoss && totalProfit 
+          profitLossCount && totalLoss && totalProfit 
         ) ? 
           ( 
             <>
@@ -63,8 +63,8 @@ export default async function Dashboard(props: {
               <div className="grid grid-cols-1 gap-4 @2xl:grid-cols-2">
                 <Suspense fallback="Loading Chart ...">
                   <ProfitLossPieChart 
-                    profit={totalProfit.profit * 100} 
-                    loss={Math.abs(totalLoss.loss * 100)}  
+                    profit={totalProfit.profit / 100} 
+                    loss={Math.abs(totalLoss.loss / 100)}  
                   />
                 </Suspense>
                 <Suspense fallback="Loading Chart ...">

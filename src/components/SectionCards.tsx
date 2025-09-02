@@ -5,7 +5,7 @@ export default function SectionCards({
 }: {
     balance: number,
     winRate: number,
-    profitLossRatio: number[],
+    profitLossRatio: number[] | undefined,
     profitLossCount: {
       profit: number;
       loss: number;
@@ -32,7 +32,12 @@ export default function SectionCards({
       <Card className="@container/card">
         <CardHeader>
           <Description>P & L RATIO</Description>
-          <Title>{profitLossRatio[0]}:{profitLossRatio[1]}</Title>
+          <Title>
+            { (profitLossRatio && profitLossRatio.length >=2 ) ?
+              `${profitLossRatio[0]}:${profitLossRatio[1]}`:
+              "N/A"
+            }
+          </Title>
         </CardHeader>
       </Card>
 
