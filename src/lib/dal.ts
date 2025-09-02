@@ -43,7 +43,7 @@ export const isCurrentUserAdmin = cache(async () => {
   return await isUserAdmin(user.id);
 });
 
-export const checkUserRoleIsNone = (async () => {
+export const checkUserRoleIsNone = cache(async () => {
   const supabase = await createClient();
   const { error, data: { user } } = await supabase.auth.getUser();
   if (error || !user ) notFound();
