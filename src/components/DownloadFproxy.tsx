@@ -6,7 +6,7 @@ export default async function DownloadFproxy() {
   return (
     <div className="mt-8 grid gap-2">
       <h3 className="text-xl font-semibold">Download Fproxy</h3>
-      <p className="text-muted-foreground">Download Fproxy for windows, Version 0.0.2.</p>
+      <p className="text-muted-foreground">Download Fproxy for windows, Version 0.0.3.</p>
       <Button asChild variant={"secondary"}>
         <Link href="https://www.mediafire.com/folder/gjbitu8s9z39b/Fproxy">Download</Link>
       </Button>
