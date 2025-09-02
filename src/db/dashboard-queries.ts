@@ -53,6 +53,7 @@ export async function getMostUsedPhase({ from, to }: RangeType) {
   try {
     const pc = await db.select({
       phase: phases.phase,
+      phaseColor: phases.phaseColor,
       phaseCount: count(trades.phasesId)
     }).from(trades)
       .where(
@@ -62,7 +63,8 @@ export async function getMostUsedPhase({ from, to }: RangeType) {
         )
       )
       .innerJoin(phases, eq(phases.id, trades.phasesId))
-      .groupBy(phases.phase);
+      // Both columns must be included to prevent postgres database error
+      .groupBy(phases.phase, phases.phaseColor);
 
     return (pc && pc.length > 0) ? pc : undefined;
   } catch {

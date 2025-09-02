@@ -6,8 +6,9 @@ export default function MostUsedPhasesChart({
   data
 }: {
     data: {
-      phase: string,
-      phaseCount: number
+      phase: string;
+      phaseColor: string | null;
+      phaseCount: number;
     }[]
   }) {
 
@@ -17,7 +18,13 @@ export default function MostUsedPhasesChart({
     </div>;
   } 
 
-  const chartData = data.map(d => ({ name: d.phase, value: d.phaseCount }));
+  const chartData = data.map(d => 
+    ({
+      name: d.phase, 
+      value: d.phaseCount, 
+      itemStyle: { color: d.phaseColor ? d.phaseColor: "#eee" }
+    })
+  );
 
   const options: EChartsOption = {
     tooltip: {

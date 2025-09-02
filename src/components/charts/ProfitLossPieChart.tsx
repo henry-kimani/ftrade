@@ -21,6 +21,10 @@ export default function ProfitLossPieChart({
     tooltip: {
       trigger: "item"
     },
+    color: [
+      '#00c950',
+      '#fb2c36',
+    ],
     series: [
       {
         name: "Total P & L",

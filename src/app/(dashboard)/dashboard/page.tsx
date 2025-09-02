@@ -50,8 +50,7 @@ export default async function Dashboard(props: {
       </SiteHeader>
       <main className="grid p-4 gap-4">
         {(
-          profitLossRatio && profitLossCount && totalLoss && totalProfit &&
-            mostUsedPhase 
+          profitLossRatio && profitLossCount && totalLoss && totalProfit 
         ) ? 
           ( 
             <>
@@ -69,7 +68,17 @@ export default async function Dashboard(props: {
                   />
                 </Suspense>
                 <Suspense fallback="Loading Chart ...">
-                  <MostUsedPhasesChart data={mostUsedPhase} />
+                  {mostUsedPhase ?
+                    <MostUsedPhasesChart data={mostUsedPhase} /> :
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>No Phases yet</CardTitle>
+                        <CardDescription>There are no phases attached to trades of the selected date range.</CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                      </CardContent>
+                    </Card>
+                  }
                 </Suspense>
               </div>
             </>

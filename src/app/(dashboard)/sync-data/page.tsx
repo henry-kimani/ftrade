@@ -2,9 +2,10 @@ import DownloadFproxy from "@/components/DownloadFproxy";
 import SiteHeader from "@/components/SiteHeader";
 import SyncToMt from "@/components/SyncToMT";
 import { isUserAdmin } from "@/db/queries";
-import { verifyUser } from "@/lib/dal";
+import { checkUserRoleIsNone, verifyUser } from "@/lib/dal";
 
 export default async function SyncData() {
+  await checkUserRoleIsNone();
   const { user } = await verifyUser();
   const isAdmin = await isUserAdmin(user.id);
 
