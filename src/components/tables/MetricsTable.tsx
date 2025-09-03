@@ -1,7 +1,7 @@
 import { getTradeById } from "@/db/queries";
 import { cn, toSentenceCase } from "@/lib/utils";
 import { format } from "date-fns";
-import { Diameter, HandCoins, LogIn, LogOut, OctagonXIcon, Scale, TrendingUp, TrendingDown, BanknoteArrowUp, BanknoteArrowDown, ClockArrowUp, ClockArrowDown } from "lucide-react";
+import { Diameter, HandCoins, LogIn, LogOut, OctagonXIcon, Scale, TrendingUp, TrendingDown, BanknoteArrowUp, BanknoteArrowDown, ClockArrowUp, ClockArrowDown, CircleDollarSignIcon } from "lucide-react";
 
 
 export default async function MetricsTable({ tradeId }: { tradeId: string }) {
@@ -19,6 +19,12 @@ export default async function MetricsTable({ tradeId }: { tradeId: string }) {
       metric: trade.profitInCents < 0 ? "loss" : "profit",
       value: "$ "+(trade.profitInCents / 100).toPrecision(),
       className: trade.profitInCents < 0 ? "text-red-400" : "text-green-400"
+    },
+    {
+      icon: CircleDollarSignIcon,
+      metric: "symbol",
+      value: trade.symbol,
+      className: "text-zinc-400"
     },
     {
       icon: LogIn,
