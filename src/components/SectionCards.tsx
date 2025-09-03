@@ -4,7 +4,7 @@ export default function SectionCards({
   balance, winRate, profitLossRatio, profitLossCount
 }: {
     balance: number,
-    winRate: number,
+    winRate: number | undefined,
     profitLossRatio: number[] | undefined,
     profitLossCount: {
       profit: number;
@@ -25,7 +25,7 @@ export default function SectionCards({
         <CardHeader>
           <Description>WIN RATE</Description>
           {/* win / total * 100 */}
-          <Title>{winRate}%</Title>
+          <Title>{ winRate ? `${winRate}%` : "N/A" }</Title>
         </CardHeader>
       </Card>
 
@@ -49,13 +49,13 @@ export default function SectionCards({
               <div 
                 // Into a percentage
                 style={{ flexBasis: profitLossCount.profit/(profitLossCount.profit + profitLossCount.loss) * 100 + "%" }} 
-                className="rounded-l-full h-full bg-green-500 grid place-items-center text-xs text-muted"
+                className="basis-1/2 px-1 rounded-l-full h-full bg-green-500 grid place-items-center text-xs text-muted"
               >
                 {profitLossCount.profit}
               </div>
               <div 
-                style={{ flexBasis: profitLossCount.loss/(profitLossCount.profit + profitLossCount.loss) * 100 + "%" }} 
-                className="basis-[30%] rounded-r-full h-full bg-red-500 grid place-items-center text-xs text-muted"
+                style={{ flexBasis: profitLossCount.loss/(profitLossCount.profit + profitLossCount.loss) * 100 + "%" }}
+                className="basis-1/2 px-1 rounded-r-full h-full bg-red-500 grid place-items-center text-xs text-muted"
               >
                 {profitLossCount.loss}
               </div>

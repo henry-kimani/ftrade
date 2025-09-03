@@ -55,7 +55,7 @@ export default async function Dashboard(props: {
           ( 
             <>
               <SectionCards 
-                balance={Number((accountBalance.balance/100).toFixed(2))} 
+                balance={accountBalance ? Number((accountBalance.balance/100).toFixed(2)) : 0 } 
                 winRate={winRate}
                 profitLossRatio={profitLossRatio}
                 profitLossCount={profitLossCount}

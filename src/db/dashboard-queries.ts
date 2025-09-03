@@ -74,37 +74,55 @@ export async function getMostUsedPhase({ from, to }: RangeType) {
 }
 
 export async function getAccountBalance() {
-  const balance = await db.select({
-    balance: accounts.accountBalance
-  }).from(accounts);
+  try {
+    const balance = await db.select({
+      balance: accounts.accountBalance
+    }).from(accounts);
 
-  return balance[FIRST_RESULT];
+    if (balance[FIRST_RESULT]) {
+      return balance[FIRST_RESULT];
+    } else {
+      return undefined;
+    }
+  } catch  {
+    throw new Error("Could not get balance");
+  }
 }
 
 
 export async function getWinRate({ from, to }: RangeType) {
-  const totalTrades = await db.select({
-    total: count()
-  }).from(trades)
-    .where(
-      and(
-        gte(trades.entryTime, from),
-        lte(trades.entryTime, to)
-      )
-    );
+  try {
+    const totalTrades = await db.select({
+      total: count()
+    }).from(trades)
+      .where(
+        and(
+          gte(trades.entryTime, from),
+          lte(trades.entryTime, to)
+        )
+      );
 
-  const wonTrades = await db.select({
-    wonTrades: count()
-  }).from(trades)
-    .where(
-      and(
-        gt(trades.profitInCents, 0),
-        gte(trades.entryTime, from),
-        lte(trades.entryTime, to)
-      )
-    );
+    const wonTrades = await db.select({
+      wonTrades: count()
+    }).from(trades)
+      .where(
+        and(
+          gt(trades.profitInCents, 0),
+          gte(trades.entryTime, from),
+          lte(trades.entryTime, to)
+        )
+      );
 
-  return Math.floor((wonTrades[FIRST_RESULT].wonTrades / totalTrades[FIRST_RESULT].total) * 100);
+    const winRate = Math.floor((wonTrades[FIRST_RESULT].wonTrades / totalTrades[FIRST_RESULT].total) * 100);
+
+    if (isNaN(winRate)) {
+      return undefined;
+    }
+
+    return winRate;
+  } catch {
+    throw new Error("Failed to calculate winrate.");
+  }
 }
 
 
