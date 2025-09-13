@@ -10,11 +10,13 @@ import "@uppy/dashboard/dist/style.min.css";
 import "@uppy/image-editor/dist/style.min.css";
 import { Button } from "@/components/ui/button";
 import { ImageUpIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function ScreenshotUploader({ tradeId}: { tradeId: string }) {
 
   const ref = useRef<HTMLDivElement>(null);
   const uploadRef = useRef<HTMLButtonElement>(null);
+  const router = useRouter();
 
   useEffect(() => {
     if(ref && uploadRef) {
@@ -24,7 +26,10 @@ export default function ScreenshotUploader({ tradeId}: { tradeId: string }) {
         .use(Xhr, { 
           endpoint: "/api/upload",
           formData: true,
-          fieldName: "screenshots"
+          fieldName: "screenshots",
+          onAfterResponse() {
+            router.refresh();
+          },
         })
         .use(Dashboard, {
           inline: false,
