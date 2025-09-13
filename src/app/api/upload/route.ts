@@ -41,11 +41,13 @@ export async function POST(request: NextRequest) {
   screenshots.forEach(async(file) =>  {
     if (!file) return NextResponse.json({ error: "No file"}, { status: 400 });
 
-    const filePath = genPathName("shot", tradeId, file)
-    const {error} = await supabase.storage.from("screenshots").upload(filePath, file);
+    const filePath = genPathName("shot", tradeId, file);
 
-    if (error) {
-      return NextResponse.json({ error: "Error on upload" }, { status: 502 });
+    try {
+      await supabase.storage.from("screenshots").upload(filePath, file);
+
+    } catch {
+      return NextResponse.json({ error: "Error on upload image" }, { status: 502 });
     }
 
     /* Save the urls in the database */
@@ -53,11 +55,11 @@ export async function POST(request: NextRequest) {
       await uploadScreenshotsUrls(tradeId, filePath);
     } catch(error) {
       console.log("DB: ", error);
-      return NextResponse.json({ error: "Error on upload to db" }, { status: 500 })
+      return NextResponse.json({ error: "Error on upload url to db" }, { status: 500 })
     }
   })
 
   revalidatePath("/trades");
-  return NextResponse.json({ revalidated: true });
+  return NextResponse.json({ revalidate: true }, { status: 200 });
 }
 
