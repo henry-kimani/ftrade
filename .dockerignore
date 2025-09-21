@@ -1,0 +1,59 @@
+# Next js
+.next
+out
+
+# Ignore common version control directories and files
+.git
+.gitignore
+.svn
+.hg
+
+# Ignore common build and dependency directories
+node_modules/
+vendor/
+target/
+dist/
+build/
+tmp/
+*.log
+*.tmp
+*.bak
+
+# Ignore common cache and temporary files
+.cache/
+.coverage/
+.pytest_cache/
+__pycache__/
+*.pyc
+*.o
+*.so
+
+# Ignore environment-specific configuration files
+.env*
+.flaskenv
+.vscode/
+
+# Ignore documentation and test-related files if not needed in the final image
+docs/
+tests/
+test/
+
+# Specific exclusions for common languages/frameworks
+# Node.js
+npm-debug.log
+yarn-error.log
+
+# Python
+pip-log.txt
+.venv/
+
+# Java
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+release.properties
+
+# Exclude Docker-related files themselves from being copied *into* the image,
+# though they are still sent to the Docker daemon to build the image.
+Dockerfile
+.dockerignore
