@@ -1,3 +1,5 @@
+volumes/db/data
+
 # Next js
 .next
 out
