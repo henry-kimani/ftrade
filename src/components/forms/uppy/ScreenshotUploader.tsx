@@ -40,7 +40,7 @@ export default function ScreenshotUploader({ tradeId}: { tradeId: string }) {
         .use(ImageEditor)
         .setMeta({ tradeId: tradeId })
     }
-  }, [tradeId]);
+  }, [tradeId, router]);
 
   return (
     <section>
