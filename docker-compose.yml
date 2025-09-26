@@ -10,7 +10,7 @@ name: ftrade
 services:
 
   ftrade-web:
-    image: localhost/henry-kimani/ftrade:latest
+    build: .
     ports: 
       - "3000:3000"
     depends_on:
@@ -388,7 +388,7 @@ services:
       DB_PASSWORD: ${POSTGRES_PASSWORD}
       DB_SCHEMA: _analytics
       LOGFLARE_PUBLIC_ACCESS_TOKEN: ${LOGFLARE_PUBLIC_ACCESS_TOKEN}
-      LOGFLARE_PRIVATE_ACCESS_TOKEN: ${LOGFLARE_PRIVATE_ACCESS_TOKEN}
+      # LOGFLARE_PRIVATE_ACCESS_TOKEN: ${LOGFLARE_PRIVATE_ACCESS_TOKEN}
       LOGFLARE_SINGLE_TENANT: true
       LOGFLARE_SUPABASE_MODE: true
       LOGFLARE_MIN_CLUSTER_SIZE: 1
@@ -461,19 +461,18 @@ services:
 
   vector:
     container_name: supabase-vector
-    image: timberio/vector:0.28.1-alpine
+    build: ./volumes/logs/
     restart: unless-stopped
     volumes:
       - ./volumes/logs/vector.yml:/etc/vector/vector.yml:ro,z
-      - ${DOCKER_SOCKET_LOCATION}:/var/run/docker.sock:ro,z
+      - /etc/machine-id:/etc/machine-id:ro,z
+      - ${JOURNAL_LOGS_DIR}:/var/log/journal
     healthcheck:
       test:
         [
           "CMD",
-          "wget",
-          "--no-verbose",
-          "--tries=1",
-          "--spider",
+          "curl",
+          "-f",
           "http://vector:9001/health"
         ]
       timeout: 5s
@@ -486,6 +485,8 @@ services:
         "--config",
         "/etc/vector/vector.yml"
       ]
+    logging:
+      driver: none
     security_opt:
       - "label=disable"
 
